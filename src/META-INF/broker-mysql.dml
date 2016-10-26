@@ -1,0 +1,40 @@
+-- MySQL initialization script for auction broker application
+SET CHARACTER SET utf8;
+USE broker;
+DELETE FROM BaseEntity;
+
+INSERT INTO BaseEntity VALUES (0, "Person", 1, UNIX_TIMESTAMP()*1000);
+SET @ei1 = LAST_INSERT_ID();
+INSERT INTO Person VALUES (@ei1, "ines", UNHEX(SHA2("ines",256)), "ADMIN", "Ines", "Bergmann", "Wiener Strasse 42", "10999", "Berlin", "ines.bergmann@web.de", "0172/2345678");
+
+INSERT INTO BaseEntity VALUES (0, "Person", 1, UNIX_TIMESTAMP()*1000);
+SET @ei2 = LAST_INSERT_ID();
+INSERT INTO Person VALUES (@ei2, "sascha", UNHEX(SHA2("sascha",256)), "ADMIN", "Sascha", "Baumeister", "Ohlauer Strasse 29", "10999", "Berlin", "sascha.baumeister@gmail.com", "0174/3345975");
+
+INSERT INTO BaseEntity VALUES (0, "Auction", 1, UNIX_TIMESTAMP()*1000);
+SET @ei3 = LAST_INSERT_ID();
+INSERT INTO Auction VALUES (@ei3, @ei1, "Rennrad wie neu", 1, 8000, (UNIX_TIMESTAMP()+30*24*60*60)*1000, "Schmuckes Rennrad von Adler, keine Kratzer, wie geklaut");
+
+INSERT INTO BaseEntity VALUES (0, "Auction", 1, UNIX_TIMESTAMP()*1000);
+SET @ei4 = LAST_INSERT_ID();
+INSERT INTO Auction VALUES (@ei4, @ei1, "Stereoanlage neuwertig", 1, 5000, (UNIX_TIMESTAMP()+30*24*60*60)*1000, "Verkaufe meine Stereoanlage: Plattenspieler, Amp, Radio alles von Kenwood");
+
+INSERT INTO BaseEntity VALUES (0, "Auction", 1, UNIX_TIMESTAMP()*1000);
+SET @ei5 = LAST_INSERT_ID();
+INSERT INTO Auction VALUES (@ei5, @ei2, "Laptop guenstig I", 2, 10000, (UNIX_TIMESTAMP()+30*24*60*60)*1000, "HP Laptop, 233MHz, 1GB Platte, schon etwas aelter");
+
+INSERT INTO BaseEntity VALUES (0, "Auction", 1, (UNIX_TIMESTAMP()-30*24*60*60)*1000);
+SET @ei6 = LAST_INSERT_ID();
+INSERT INTO Auction VALUES (@ei6, @ei2, "Laptop guenstig II", 3, 12500, UNIX_TIMESTAMP()*1000, "HP Laptop, 233MHz, 2GB Platte, schon etwas aelter");
+
+INSERT INTO BaseEntity VALUES (0, "Auction", 1, (UNIX_TIMESTAMP()-30*24*60*60)*1000);
+SET @ei7 = LAST_INSERT_ID();
+INSERT INTO Auction VALUES (@ei7, @ei2, "Laptop guenstig III", 1, 2000, UNIX_TIMESTAMP()*1000, "HP Laptop, 50 MHz, 0.1 GB Platte, richtig antik");
+
+INSERT INTO BaseEntity VALUES (0, "Bid", 1, UNIX_TIMESTAMP()*1000);
+INSERT INTO Bid VALUES (LAST_INSERT_ID(), @ei2, @ei3, 15000);
+
+INSERT INTO BaseEntity VALUES (0, "Bid", 1, (UNIX_TIMESTAMP()-15*24*60*60)*1000);
+INSERT INTO Bid VALUES (LAST_INSERT_ID(), @ei1, @ei6, 22000);
+
+SELECT identity,discriminator,alias,title,askingPrice,price FROM JoinedEntity;

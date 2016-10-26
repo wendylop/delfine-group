@@ -1,0 +1,58 @@
+Project
+=======
+- name: broker-model
+- purpose: JPA model & REST services
+
+
+Dependencies
+============
+- User-Libraries (from //share/lehrende/Baumeister/Master Programming/lib):
+  - java-util-1.1
+    - ./java/java-util-1.1.4.jar
+
+  - javaee-api-7
+    - ./java/javaee-api-7.0.jar
+    - ./java/javaee-api-7.0-sources.jar -> source attachment (external source) for above
+
+  - jersey-2.23 (required for optional @EntityFiltering and @CacheIndex annotations)
+    - ./jax-rs/jersey-2.23.2/*.jar
+
+
+Project Settings
+================
+- ensure Compiler Compliance Level 1.8+ (Properties->Java Compiler)
+  on Eclipse IDE for Java Developers, version Luna+
+
+
+File Import
+===========
+- type: General/File System
+- from: /share/lehrende/Baumeister/Master Programming/code/broker-model
+- into: broker-model/src
+
+
+Database Setup
+==============
+- download & install MySQL Community server 5.5+
+  - Windows & OS X: download from http://dev.mysql.com/downloads/mysql/
+  - Ubutu, Debian, Mint: sudo apt-get install mysql-server
+
+- start terminal
+  - mysql --host=<host> --port=<port> --user=<userid> --password
+    - host optional if localhost
+    - port optional if 3306
+    - on local installations user is usually "root", password "root" or "" 
+    - "copy&paste broker-mysql.ddl" or "source <path>/broker-mysql.ddl"
+    - "copy&paste broker-mysql.dml" or "source <path>/broker-mysql.dml"
+
+- edit persistence.xml and update properties to match your environment:
+  - javax.persistence.jdbc.user
+  - javax.persistence.jdbc.password
+  - javax.persistence.jdbc.url
+
+
+Firefox Setup
+=============
+- install Add-On "JSONView" or similar in about:addons
+- insert "application/json;q=0.9," before similar entry for XML in
+  "about:config" setting "network.http.accept.default"

@@ -1,0 +1,18 @@
+// UML entity-relationship diagram for broker-model
+// Render using http://yuml.me/diagram/plain/class/draw
+[Comparable| +compareTo(:T):int; ]
+[Group| _+ADMIN:Group; _+USER:Group; | ]
+[BaseEntity| -identity:long; -version:int; -creationTimestamp:long | ...]
+[BaseEntity]-.-^[Comparable]
+
+[Auction| -title:char 1..255; -unitCount:short; -askingPrice:long; -closureTimestamp:long; -description:char 1..8189; -seller:Person; -bids:Bid 0..*; | +getSeller():Person; +getSellerReference():long; +getBid(bidder:Person) Bid 0..1; +isClosed():boolean; +isSealed():boolean; ...]-^[BaseEntity]
+[Bid| -price:long; -auction:Auction; -bidder:Person; | +getAuction():Auction; +getAuctionReference():long; +getBidder():Person; +getBidderReference():long; ...]-^[BaseEntity]
+[Person| -alias:char 1..16; -passwordHash:byte 32..32; -group:Group; -name:Name; -address:Address; -contact:Contact; -auctions:Auction 0..*; -bids:Bid 0..*; | _+passwordHash(password:String):byte 32..32; ...]-^[BaseEntity]
+
+[Person]++-name>[Name| -family:char 1..31; -given:char 1..31; | ...]
+[Person]++-address>[Address| -street:char 0..63; -postCode:char 0..15; -city:char 1..63; | ...]
+[Person]++-contact>[Contact| -email:char 1..63; -phone:char 0..63; | ...]
+[Person]+-group>[Group]
+[Person]<seller 1 - 0..* auctions>[Auction]
+[Person]<bidder 1 - 0..* bids>[Bid]
+[Auction]<auction 1 - 0..* bids>[Bid]

@@ -1,0 +1,84 @@
+Zusatz zu den JPA-Entitäten für Aufgabe 4
+=========================================
+
+Filterannotationen innerhalb der Klasse Auction:
+
+	/**
+	 * Filter annotation for associated sellers marshaled as entities.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlSellerAsEntityFilter {
+		static final class Literal extends AnnotationLiteral<XmlSellerAsEntityFilter> implements XmlSellerAsEntityFilter {}
+	}
+
+	/**
+	 * Filter annotation for associated sellers marshaled as references.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlSellerAsReferenceFilter {
+		static final class Literal extends AnnotationLiteral<XmlSellerAsReferenceFilter> implements XmlSellerAsReferenceFilter {}
+	}
+
+	/**
+	 * Filter annotation for associated bids marshaled as entities.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlBidsAsEntityFilter {
+		static final class Literal extends AnnotationLiteral<XmlBidsAsEntityFilter> implements XmlBidsAsEntityFilter {}
+	}
+
+
+Filterannotationen innerhalb der Klasse Bid:
+
+	/**
+	 * Filter annotation for associated bidders marshaled as entities.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlBidderAsEntityFilter {
+		static final class Literal extends AnnotationLiteral<XmlBidderAsEntityFilter> implements XmlBidderAsEntityFilter {}
+	}
+
+	/**
+	 * Filter annotation for associated bidders marshaled as references.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlBidderAsReferenceFilter {
+		static final class Literal extends AnnotationLiteral<XmlBidderAsReferenceFilter> implements XmlBidderAsReferenceFilter {};
+	}
+
+	/**
+	 * Filter annotation for associated auctions marshaled as entities.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlAuctionAsEntityFilter {
+		static final class Literal extends AnnotationLiteral<XmlAuctionAsEntityFilter> implements XmlAuctionAsEntityFilter {}
+	}
+
+	/**
+	 * Filter annotation for associated auctions marshaled as references.
+	 */
+	@Target({TYPE, METHOD, FIELD})
+	@Retention(RUNTIME)
+	@EntityFiltering
+	@SuppressWarnings("all")
+	static public @interface XmlAuctionAsReferenceFilter {
+		static final class Literal extends AnnotationLiteral<XmlAuctionAsReferenceFilter> implements XmlAuctionAsReferenceFilter {}
+	}
