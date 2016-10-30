@@ -1,8 +1,12 @@
 package de.sb.broker.model;
 
+import javax.validation.constraints.Min;
+
 public class BaseEntity implements Comparable<BaseEntity>{
 	
 	private final long identity;
+	
+	@Min(1)
 	private volatile int version;
 	private final long creationTimestamp;
 	

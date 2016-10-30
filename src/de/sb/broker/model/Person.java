@@ -7,15 +7,33 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 public class Person extends BaseEntity{
 	
+	@NotNull
+	@Size(min=1,max=16)
 	private String alias;
+	
+	@NotNull
+	@Size(min=32,max=32)
 	private byte[] passwordHash;
+	
+	@NotNull
 	private Group group;
+	
+	@Valid
 	private final Name name;
+	
+	@Valid
 	private final Address address;
+
+	@Valid
 	private final Contact contact;
+	
 	private final Set<Auction> auctions;
 	private final Set<Bid> bids;
 	

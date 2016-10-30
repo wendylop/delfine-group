@@ -1,11 +1,22 @@
 package de.sb.broker.model;
 
+/*import de.sb.java.validation.Inequal;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;*/
+
+import javax.validation.constraints.Min;
+//import javax.validation.constraints.NotNull;
+
 public class Bid extends BaseEntity  {
 
+	@Min(1)
 	private long price;
+	
+	//hier kein NotNull
 	private final Auction auction;
 	private final Person bidder;
 
+	
 	public Bid(Auction auction,Person bidder){
 		
 		this.price = auction == null ? 1 : auction.getAskingPrice();

@@ -1,8 +1,15 @@
 package de.sb.broker.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Name {
-	
+	@NotNull
+	@Size(min=1,max=31)
 	private String family;
+	
+	@NotNull
+	@Size(min=1,max=31)
 	private String given;
 	
 	public String getFamily(){
