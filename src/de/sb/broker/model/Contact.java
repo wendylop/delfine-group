@@ -1,8 +1,18 @@
 package de.sb.broker.model;
 
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+@Embeddable
 public class Contact {
-	
+	@NotNull
+	@Size(min=1,max=63)
+	@Pattern(regexp=".@.")
 	private String email;
+
+	@Size(min=0,max=63)
 	private String phone;
 	
 	//Attributen
