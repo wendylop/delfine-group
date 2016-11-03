@@ -3,13 +3,14 @@ package de.sb.broker.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import de.sb.java.validation.Inequal;
 
-
+@Embeddable
 @Inequal(leftAccessPath = { "" }, rightAccessPath = { "" })
 public class Auction extends BaseEntity {
 

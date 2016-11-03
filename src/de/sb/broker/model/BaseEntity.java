@@ -1,9 +1,20 @@
 package de.sb.broker.model;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+@Entity
+@Table(name="BASEENTITY",schema="")
+@Inheritance
+@DiscriminatorColumn 
 public class BaseEntity implements Comparable<BaseEntity>{
-	
+	@GeneratedValue
+	@Id
 	private final long identity;
 	
 	@Min(1)

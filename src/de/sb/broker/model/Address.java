@@ -1,8 +1,10 @@
 package de.sb.broker.model;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Embeddable
 public class Address {
 	@Size(min=0,max=63)
 	private String street;
