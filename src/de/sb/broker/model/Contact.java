@@ -1,8 +1,24 @@
 package de.sb.broker.model;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.sun.istack.internal.NotNull;
+
+@Embeddable
 public class Contact {
 	
+	@Column(nullable = false, updatable = true, length = 63, unique = true)
+	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$") //nur auf @
+	@Size (min = 1, max = 63)
+	@NotNull
 	private String email;
+	
+	@Column(nullable = true, updatable = true, length = 63)
+	@Size (min = 0, max = 63)
+	@NotNull
 	private String phone;
 	
 	//Attributen
