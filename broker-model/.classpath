@@ -5,5 +5,28 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/java-util-1.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaee-api-7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jersey-2.23"/>
+	<classpathentry kind="lib" path="lib/java/java-util-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/java/javaee-api-7.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/java/javaee-api-7.0.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-api-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-locator-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-utils-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/javassist-3.20.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/javax.json-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-bean-validation-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-client.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-common.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-jdk-http-2.23.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-servlet-core.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-entity-filtering-2.23.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-guava-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-media-jaxb.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-media-moxy-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-server.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.antlr-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.asm-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.core-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.moxy-2.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
