@@ -1,0 +1,7 @@
+// UML entity-relationship diagram for JUnit service tests
+// Render using http://yuml.me/diagram/plain/class/draw
+[ServiceTest| _-HTTP_CONTAINER:HttpServer; -wasteBasket:Long 0..*; | _+newWebTarget(alias:String password:String):WebTarget; +getWasteBasket():Long 0..*; ...];
+[PersonServiceTest| | +testCriteriaQueries(); +testIdentityQueries(); +testAuctionRelationQueries(); +testBidRelationQueries(); +testLifeCycle(); ...]
+[PersonServiceTest]-^[ServiceTest]
+[AuctionServiceTest| | +testCriteriaQueries(); +testIdentityQueries(); +testBidRelations(); ...]
+[AuctionServiceTest]-^[ServiceTest]
