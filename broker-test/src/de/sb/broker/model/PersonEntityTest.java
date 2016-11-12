@@ -25,9 +25,9 @@ public class PersonEntityTest extends EntityTest{
 		person1.setAlias("Batman");
 		person1.getName().setFamily("Bruce");
 		person1.getName().setGiven("Wayne");
-		person1.getAdress().setStreet("Wayne Street 1");
-		person1.getAdress().setCity("Gotham");
-		person1.getAdress().setPostCode("30456");
+		person1.getAddress().setStreet("Wayne Street 1");
+		person1.getAddress().setCity("Gotham");
+		person1.getAddress().setPostCode("30456");
 		person1.getContact().setEmail("bruce.wayne@wayne-enterprise.com");
 		person1.getContact().setPhone("01506060601");
 		
@@ -36,9 +36,9 @@ public class PersonEntityTest extends EntityTest{
 		person2.setAlias("Joker");
 		person2.getName().setFamily("");
 		person2.getName().setGiven("");
-		person2.getAdress().setStreet("Wayne Street 1");
-		person2.getAdress().setCity("");
-		person2.getAdress().setPostCode("0123456789012345678");
+		person2.getAddress().setStreet("Wayne Street 1");
+		person2.getAddress().setCity("");
+		person2.getAddress().setPostCode("0123456789012345678");
 		person2.getContact().setEmail("hahahahahahahaha.joker");
 		person2.getContact().setPhone("Which Phone!!!");
 		
@@ -65,9 +65,9 @@ public class PersonEntityTest extends EntityTest{
 		person1.setAlias("Batman");
 		person1.getName().setFamily("Bruce");
 		person1.getName().setGiven("Wayne");
-		person1.getAdress().setStreet("Wayne Street 1");
-		person1.getAdress().setCity("Gotham");
-		person1.getAdress().setPostCode("30456");
+		person1.getAddress().setStreet("Wayne Street 1");
+		person1.getAddress().setCity("Gotham");
+		person1.getAddress().setPostCode("30456");
 		person1.getContact().setEmail("bruce.wayne@wayne-enterprise.com");
 		person1.getContact().setPhone("01506060601");
 		

@@ -26,9 +26,9 @@ public class AuctionEntityTest extends EntityTest{
 		seller.setAlias("Batman");
 		seller.getName().setFamily("Bruce");
 		seller.getName().setGiven("Wayne");
-		seller.getAdress().setStreet("Wayne Street 1");
-		seller.getAdress().setCity("Gotham");
-		seller.getAdress().setPostCode("30456");
+		seller.getAddress().setStreet("Wayne Street 1");
+		seller.getAddress().setCity("Gotham");
+		seller.getAddress().setPostCode("30456");
 		seller.getContact().setEmail("bruce.wayne@wayne-enterprise.com");
 		seller.getContact().setPhone("01506060601");
 		
