@@ -1,0 +1,11 @@
+// UML entity-relationship diagram for JUnit model tests
+// Render using http://yuml.me/diagram/plain/class/draw
+[EntityTest| -wasteBasket:Long 0..*; | +getEntityManagerFactory():EntityManagerFactory; +getEntityValidatorFactory():ValidatorFactory; +getWasteBasket():Long 0..*; ...];
+[PersonEntityTest| | +testConstraints(); +testLifeCycle(); ...]
+[PersonEntityTest]-^[EntityTest]
+[PersonEntityTest]-.-testLifeCycle()[note: em = this.getEntityManagerFactory().createEntityManager(); em.getTransaction().begin(); ... ; em.persist(entity); em.getTransaction().commit(); this.getWasteBasket().add(entity.getIdentity()); ...; em.close(); ]
+[AuctionEntityTest| | +testConstraints(); +testLifeCycle(); ...]
+[AuctionEntityTest]-^[EntityTest]
+[BidEntityTest| | +testConstraints(); +testLifeCycle(); ...]
+[BidEntityTest]-^[EntityTest]
+[BidEntityTest]-.-testConstraints()[note: validator = this.getEntityValidatorFactory().getValidator(); entity = new Bid(); ...; constraintViolations = validator.validate(entity); ... ]
