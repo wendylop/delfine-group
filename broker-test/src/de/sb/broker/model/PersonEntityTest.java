@@ -3,17 +3,20 @@ package de.sb.broker.model;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
+
 public class PersonEntityTest extends EntityTest{
-	private EntityManager em;
-	private Validator validator;
-	
-	Set<ConstraintViolation<Person>> constrainViolations;
+	private Validator validator;	
+	Set<ConstraintViolation<Person>> constrainViolations;	
+	private final EntityManager em = this.getEntityManagerFactory().createEntityManager();
 	
 	@Test
 	public void testConstraints()
@@ -23,8 +26,8 @@ public class PersonEntityTest extends EntityTest{
 		//create valid person
 		Person person1 = new Person();
 		person1.setAlias("Batman");
-		person1.getName().setFamily("Bruce");
-		person1.getName().setGiven("Wayne");
+		person1.getName().setFamily("Wayne");
+		person1.getName().setGiven("Bruce");
 		person1.getAddress().setStreet("Wayne Street 1");
 		person1.getAddress().setCity("Gotham");
 		person1.getAddress().setPostCode("30456");
@@ -45,51 +48,60 @@ public class PersonEntityTest extends EntityTest{
 		//test person1
 		constrainViolations = validator.validate(person1);
 		//check if there are errors - should be 0
-		assertEquals(constrainViolations.size(), 0);
+		Assert.assertEquals(constrainViolations.size(), 0);
 		
 		//remove old values
 		constrainViolations.clear();
 		
 		//test person2
 		constrainViolations = validator.validate(person2);
-		//check if ther are errors - should be 5
-		assertEquals(constrainViolations.size(), 5);		
+		//check if there are errors - should be 5
+		Assert.assertEquals(constrainViolations.size(), 5);		
 	}
 	
 	@Test
 	public void testLifeCycle()
 	{	
-		em = this.getEntityManagerFactory().createEntityManager();
+				//persist person entity
+		Person person = new Person();
+		person.setAlias("Batman");
+		person.getName().setFamily("Wayne");
+		person.getName().setGiven("Bruce");
+		person.getAddress().setStreet("Wayne Street 1");
+		person.getAddress().setCity("Gotham");
+		person.getAddress().setPostCode("30456");
+		person.getContact().setEmail("bruce.wayne@wayne-enterprise.com");
+		person.getContact().setPhone("01506060601");
 		
-		Person person1 = new Person();
-		person1.setAlias("Batman");
-		person1.getName().setFamily("Bruce");
-		person1.getName().setGiven("Wayne");
-		person1.getAddress().setStreet("Wayne Street 1");
-		person1.getAddress().setCity("Gotham");
-		person1.getAddress().setPostCode("30456");
-		person1.getContact().setEmail("bruce.wayne@wayne-enterprise.com");
-		person1.getContact().setPhone("01506060601");
-		
-		
-		em = this.getEntityManagerFactory().createEntityManager();
 		em.getTransaction().begin();
 		
-		em.persist(person1);
+		em.persist(person);
 		em.getTransaction().commit();
-		this.getWasteBasket().add(person1.getIdentity());
+		this.getWasteBasket().add(person.getIdentity());
 		
+		//test if entity exists in database
+		em.getTransaction().begin();
+		person = em.find(Person.class, person.getIdentity());
+		Assert.assertEquals(person.getName().getFamily(), "Wayne");
 		
-		//...
+		//remove person from database and check if it has been deleted properly
+		//em.getTransaction().begin();
+		em.remove(person);
+		em.getTransaction().commit();
 		
-		//em.persist(entity);
-		//em.getTransaction().commit();
-		//this.getWasteBasket().add(entity.getIdentity());
-		
-		//...
-		
+		//em.getTransaction().begin();
+		person = em.find(Person.class, person.getIdentity());
+		Assert.assertNull(person);
+		em.clear();
 		em.close();		
 	}
 	
+	@After
+	public void finializeTests(){
+		if (em.isOpen()){
+			em.clear();
+			em.close();
+		} 
+	}
 
 }

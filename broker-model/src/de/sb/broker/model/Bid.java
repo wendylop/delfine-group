@@ -21,7 +21,7 @@ import de.sb.java.validation.Inequal;
 public class Bid extends BaseEntity  {
 
     @Min(value = 1)
-    @Column(nullable= false, updatable= true, insertable = false)
+    @Column(nullable= false, updatable= true)
 	private long price;
 	
     @ManyToOne
