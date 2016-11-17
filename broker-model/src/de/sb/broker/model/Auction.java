@@ -16,6 +16,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.sun.xml.internal.txw2.annotation.XmlElement;
+
 import de.sb.java.validation.Inequal;
 
 @Entity
@@ -134,10 +136,12 @@ public class Auction extends BaseEntity {
 		return null;
 	}
 
+	@XmlElement
 	public boolean isClosed() {
 		return this.closureTimestamp > System.currentTimeMillis();
 	}
 
+	@XmlElement
 	public boolean isSealed() {
 		return this.isClosed() || !bids.isEmpty();
 	}
