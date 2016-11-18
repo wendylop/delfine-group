@@ -78,7 +78,7 @@ public class AuctionEntityTest extends EntityTest{
 		//TODO "find" benutzen
 		auction = em.find(Auction.class, auction.getIdentity());
 		assertEquals(auction.getTitle(), "Batarang for sale");
-		//em.clear();
+		//TODO em.clear();
 		
 		//remove auction from database and check if it has been deleted properly
 		em.getTransaction().begin();		

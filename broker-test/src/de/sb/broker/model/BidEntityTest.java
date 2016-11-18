@@ -61,6 +61,7 @@ public class BidEntityTest extends EntityTest{
 		em.persist(bid);
 		em.getTransaction().commit();
 		this.getWasteBasket().add(bid.getIdentity());
+		// TODO em.clear()
 		
 		//test if entity exists in database
 		bid = em.find(Bid.class, bid.getIdentity());
