@@ -18,6 +18,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.sun.istack.internal.NotNull;
 
@@ -29,6 +30,7 @@ public class Person extends BaseEntity{
 	@Column(nullable = false, updatable = false, length = 16, unique = true)
 	@Size (min=1, max=16)
 	@NotNull
+	@XmlElement
 	private String alias;
 	
 	@Column(nullable = false, updatable = true, length = 32)
@@ -39,21 +41,25 @@ public class Person extends BaseEntity{
 	@Column(name = "groupAlias", nullable = false, updatable = true)
 	@Enumerated(EnumType.STRING)
 	@NotNull
+	//TODO @XmlElement?
 	private Group group;
 	
 	@Embedded
 	@Valid
 	@NotNull
+	@XmlElement
 	private final Name name;
 	
 	@Embedded
 	@Valid
 	@NotNull
+	@XmlElement
 	private final Address address;
 	
 	@Embedded
 	@Valid
 	@NotNull
+	@XmlElement
 	private final Contact contact;
 	
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
@@ -116,11 +122,6 @@ public class Person extends BaseEntity{
 	public Contact getContact(){
 		return contact;
 	}
-	
-	
-	
-	
-	
 		
 	public static byte[] passwordHash(String password){
 			try {
@@ -131,8 +132,6 @@ public class Person extends BaseEntity{
 			}
 			
 	}
-
-	
 
 }
 

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 
 import de.sb.java.validation.Inequal;
 
@@ -28,34 +29,41 @@ public class Auction extends BaseEntity {
 	@Column(nullable = false, updatable = true, length = 255)
 	@Size(min = 1, max = 255)
 	@NotNull
+	@XmlElement(name="title")
 	private String title;
 	
 	@Column(nullable = false, updatable = true)
 	@Min(1)
 	@NotNull
+	@XmlElement(name="unitCount")
 	private short unitCount;
 	
 	@Column(nullable = false, updatable = true)
 	@NotNull
 	@Min(0)
+	@XmlElement(name="askingPrice")
 	private long askingPrice;
 	
 	@Column(nullable = false, updatable = true)
 	@NotNull
+	@XmlElement(name="closureTimestamp")
 	private long closureTimestamp;
 	
 	@Column(nullable = false, updatable = true, length = 8189)
 	@Size(min = 1, max = 8189)
 	@NotNull
+	@XmlElement(name="description")
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "sellerReference", nullable = false, updatable = false)
 	//@NotNull
+	//TODO @XmlElement?
 	private Person seller;
 	
 	@OneToMany(mappedBy = "auction")
 	//@NotNull
+	//TODO @XmlElement?
 	private Set<Bid> bids;
 
 	public Auction(Person seller) {
@@ -134,10 +142,12 @@ public class Auction extends BaseEntity {
 		return null;
 	}
 
+	@XmlElement
 	public boolean isClosed() {
 		return this.closureTimestamp > System.currentTimeMillis();
 	}
 
+	@XmlElement
 	public boolean isSealed() {
 		return this.isClosed() || !bids.isEmpty();
 	}

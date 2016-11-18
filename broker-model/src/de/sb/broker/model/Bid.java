@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
-
+import javax.xml.bind.annotation.XmlElement;
 
 import de.sb.java.validation.Inequal;
 
@@ -21,15 +21,20 @@ import de.sb.java.validation.Inequal;
 public class Bid extends BaseEntity  {
 
     @Min(value = 1)
-    @Column(nullable= false, updatable= true)
+   //...? @Column(nullable= false, updatable= true)
+
+    @Column(nullable= false, updatable= true, insertable = false)
+    @XmlElement
 	private long price;
 	
     @ManyToOne
 	@JoinColumn(name ="auctionReference")
+    @XmlElement
 	private final Auction auction;
 	
 	@JoinColumn(name ="bidderReference")
 	@ManyToOne
+	@XmlElement
 	private final Person bidder;
 
 	public Bid(Auction auction,Person bidder){
