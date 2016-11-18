@@ -1,3 +1,4 @@
+.metadata/
 bin/
 .DS_Store
 broker-model/src/META-INF/persistence.xml
