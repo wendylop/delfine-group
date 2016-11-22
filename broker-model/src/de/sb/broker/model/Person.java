@@ -64,7 +64,7 @@ public class Person extends BaseEntity{
 	
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
 	//@NotNull
-	private final Set<Auction> auctions;
+	public final Set<Auction> auctions;
 	
 	@OneToMany(mappedBy = "bidder", cascade = CascadeType.REMOVE)
 	//@NotNull
