@@ -1,4 +1,7 @@
 .metadata/
+broker-model/bin/
+broker-test/bin/
 bin/
 .DS_Store
 broker-model/src/META-INF/persistence.xml
+broker-model/META-INF/persistence.xml
