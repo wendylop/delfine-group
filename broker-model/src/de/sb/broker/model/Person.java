@@ -124,6 +124,16 @@ public class Person extends BaseEntity{
 	public Contact getContact(){
 		return contact;
 	}
+	
+	public Set<Auction> getAuctions(){
+		//TODO implement getter
+		return null;
+	}
+	
+	public Set<Bid> getBids(){
+		//TODO implement getter
+		return null;
+	}
 		
 	public static byte[] passwordHash(String password){
 			try {

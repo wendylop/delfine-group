@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 
 import de.sb.broker.model.Address;
 import de.sb.broker.model.Auction;
+import de.sb.broker.model.Bid;
 import de.sb.broker.model.Contact;
 import de.sb.broker.model.Name;
 import de.sb.broker.model.Person;
@@ -76,12 +77,6 @@ public class PersonService {
 	@Path("/{identity}")
 	public Person getPerson(@PathParam("identity") long identity){
 		
-		//TypedQuery<Person> query = em.createQuery("select p from Person as p where"
-		//		+ "(:identity = p.identity)", 
-		//		Person.class);
-
-		//query.setParameter("identity", identity);
-		
 		Person person = em.find(Person.class, identity);
 		
 		return person;
@@ -93,37 +88,24 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}/auctions")
-	public Set<Auction> getSomeonesAuctions(@PathParam("identity") Long identity){
+	public Set<Auction> getSomeonesAuctions(@PathParam("identity") long identity){
 		
-		TypedQuery<Person> query = em.createQuery("select p from Person as p where"
-				+ "(:identity = p.identity)", 
-				Person.class);
+		Person person = em.find(Person.class, identity);
 		
-		//TODO find verwenden
-		
-		query.setParameter("identity", identity);
-		
-		Person person = query.getSingleResult();
-		
-		return person.getAuctions();//TODO getAuctions() in Person einfügen; rückgabe sortieren: toArray(new Auction[0])  
+		return person.getAuctions();//TODO rückgabe sortieren: toArray(new Auction[0])  
 	}
 	
 	/*
 	GET /people/{identity}/bids: Returns all bids for closed auctions 
 	associated with the bidder matching the given identity.
 	 */
-	
-	
-	/** old code ... **/
-	/*
-	@GET 
-	@Path("/auctions/{identity}")
-	public Auction getAuction (@PathParam("identity") Long identity) {
-		return null;
+	@GET
+	@Path("/{identity}/bids")
+	public Set<Bid> getSomeonesBids(@PathParam("identity") long identity) {
+		
+		Person person = em.find(Person.class, identity);
+		//TODO define getter
+		return person.getBids();//TODO rückgabe sortieren: toArray(new Auction[0])
+		
 	}
-	
-	@PUT
-	@Path("/auctions")
-	public void modAuction () {}
-	*/
 }

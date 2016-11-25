@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import de.sb.broker.model.Auction;
+import de.sb.broker.model.Person;
 
 @Path("/auctions")
 public class AuctionService {
@@ -70,7 +71,7 @@ public class AuctionService {
 	public void putAuctions(Auction template){
 		final boolean insert = template.getIdentity() == 0;
 		/*
-		 * 
+		 * TODO
 		 */
 		/*
 		cache = em.getEntityManagerFactory().getCache();
@@ -85,13 +86,8 @@ public class AuctionService {
 	@GET
 	@Path("/{identity}")
 	public Auction getAuction(@PathParam("identity") Long identity){
-		TypedQuery<Auction> query = em.createQuery("select a from Auction as a where"
-				+ "(:identity = a.identity)", 
-				Auction.class);
 		
-		query.setParameter("identity", identity);
-		
-		Auction auction = query.getSingleResult();
+		Auction auction = em.find(Auction.class, identity);
 		
 		return auction;
 	}
