@@ -92,7 +92,13 @@ public class PersonService {
 		
 		Person person = em.find(Person.class, identity);
 		
+
 		return person.getAuctions();//TODO rückgabe sortieren: toArray(new Auction[0])  
+
+		
+		
+		
+		return person.getAuctions();//TODO getAuctions() in Person einfügen; rückgabe sortieren: toArray(new Auction[0])  
 	}
 	
 	/*

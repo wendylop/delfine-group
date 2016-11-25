@@ -127,12 +127,14 @@ public class Person extends BaseEntity{
 	
 	public Set<Auction> getAuctions(){
 		//TODO implement getter
-		return null;
+		return auctions;
 	}
 	
 	public Set<Bid> getBids(){
 		//TODO implement getter
-		return null;
+		return bids;
+
+
 	}
 		
 	public static byte[] passwordHash(String password){
@@ -144,6 +146,7 @@ public class Person extends BaseEntity{
 			}
 			
 	}
+
 
 }
 
