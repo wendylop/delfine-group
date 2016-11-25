@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import de.sb.java.validation.Inequal;
 
@@ -17,7 +18,7 @@ import de.sb.java.validation.Inequal;
 @PrimaryKeyJoinColumn(name = "bidIdentity")
 @Inequal(leftAccessPath = "price", rightAccessPath = { "auction", "askingPrice" } , operator = Inequal.Operator.GREATER_EQUAL )
 @Inequal(leftAccessPath = { "auction", "seller" , "identity" }, rightAccessPath = {  "bidder" , "identity" } , operator = Inequal.Operator.NOT_EQUAL)
-
+@XmlType(name="Bid")
 public class Bid extends BaseEntity  {
 
     @Min(value = 1)
@@ -29,12 +30,12 @@ public class Bid extends BaseEntity  {
 	
     @ManyToOne
 	@JoinColumn(name ="auctionReference")
-    @XmlElement
+    //kein @XmlElement
 	private final Auction auction;
 	
 	@JoinColumn(name ="bidderReference")
 	@ManyToOne
-	@XmlElement
+	//kein @XmlElement
 	private final Person bidder;
 
 	public Bid(Auction auction,Person bidder){

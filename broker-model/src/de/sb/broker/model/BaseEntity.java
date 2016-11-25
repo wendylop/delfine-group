@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name = "discriminator", discriminatorType = DiscriminatorType.STRING)
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name="")
+@XmlType(name="BaseEntity")
 @XmlSeeAlso({Auction.class, Bid.class, Person.class})
 public class BaseEntity implements Comparable<BaseEntity>{
 	

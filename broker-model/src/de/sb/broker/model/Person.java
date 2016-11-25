@@ -19,12 +19,14 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.sun.istack.internal.NotNull;
 
 @Entity
 @Table(schema = "broker", name = "Person")
 @PrimaryKeyJoinColumn(name = "personIdentity")
+@XmlType(name="Person")
 public class Person extends BaseEntity{
 	
 	@Column(nullable = false, updatable = false, length = 16, unique = true)
@@ -41,7 +43,7 @@ public class Person extends BaseEntity{
 	@Column(name = "groupAlias", nullable = false, updatable = true)
 	@Enumerated(EnumType.STRING)
 	@NotNull
-	//TODO @XmlElement?
+	@XmlElement
 	private Group group;
 	
 	@Embedded
@@ -64,7 +66,7 @@ public class Person extends BaseEntity{
 	
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
 	//@NotNull
-	public final Set<Auction> auctions;
+	private final Set<Auction> auctions;
 	
 	@OneToMany(mappedBy = "bidder", cascade = CascadeType.REMOVE)
 	//@NotNull

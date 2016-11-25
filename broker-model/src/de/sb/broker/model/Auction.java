@@ -16,7 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
-
+import javax.xml.bind.annotation.XmlType;
 
 import de.sb.java.validation.Inequal;
 
@@ -24,13 +24,14 @@ import de.sb.java.validation.Inequal;
 @Table(schema = "broker", name = "Auction", indexes = @Index(columnList = "closureTimestamp", unique = true))
 @PrimaryKeyJoinColumn(name = "auctionIdentity")
 @Inequal(leftAccessPath = { "closureTimestamp" }, rightAccessPath = { "creationTimestamp" })
+@XmlType(name="Auction")
 
 public class Auction extends BaseEntity {
 
 	@Column(nullable = false, updatable = true, length = 255)
 	@Size(min = 1, max = 255)
 	@NotNull
-	@XmlElement(name="title")
+	@XmlElement //TODO namen nur wenn abweicht
 	private String title;
 	
 	@Column(nullable = false, updatable = true)
@@ -58,13 +59,11 @@ public class Auction extends BaseEntity {
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "sellerReference", nullable = false, updatable = false)
-	//@NotNull
-	//TODO @XmlElement?
+	//@NotNull, 
 	private Person seller;
 	
 	@OneToMany(mappedBy = "auction")
 	//@NotNull
-	//TODO @XmlElement?
 	private Set<Bid> bids;
 
 	public Auction(Person seller) {
@@ -143,12 +142,12 @@ public class Auction extends BaseEntity {
 		return null;
 	}
 
-	@XmlElement
+	@XmlElement(name="closed")
 	public boolean isClosed() {
 		return this.closureTimestamp > System.currentTimeMillis();
 	}
 
-	@XmlElement
+	@XmlElement(name="sealed")
 	public boolean isSealed() {
 		return this.isClosed() || !bids.isEmpty();
 	}

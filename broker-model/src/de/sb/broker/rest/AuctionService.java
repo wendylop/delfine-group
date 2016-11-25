@@ -33,7 +33,9 @@ public class AuctionService {
 			@QueryParam("minAP") Long minAskingPrice,
 			@QueryParam("maxAP") Long maxAskingPrice,
 			@QueryParam("maxClosureTimestamp") Long maxClosureTimestamp,
-			@QueryParam("description") String description){
+			@QueryParam("description") String description,
+			@QueryParam("firstResult") int firstResult,
+			@QueryParam("maxResults") int maxResults){
 		
 		TypedQuery<Auction> qa = em.createQuery("select a from Auction as a where"
 				+ "(:title is null or a.title = :title) and"
@@ -52,9 +54,11 @@ public class AuctionService {
 		qa.setParameter("maxAP", maxAskingPrice);
 		qa.setParameter("maxClosureTimestamp", maxClosureTimestamp);
 		qa.setParameter("description", description);
+		if(maxResults > 0) qa.setMaxResults(maxResults);		
+		if(firstResult > 0) qa.setFirstResult(firstResult);
 		
 		List<Auction> auctions = qa.getResultList();
-		
+		//TODO ergebnisse sortieren, nach close date
 		return auctions;
 	}
 	/*
@@ -63,7 +67,15 @@ public class AuctionService {
 	(i.e. is open and still without bids).
 	*/
 	@PUT
-	public void putAuctions(){
+	public void putAuctions(Auction template){
+		final boolean insert = template.getIdentity() == 0;
+		/*
+		 * 
+		 */
+		/*
+		cache = em.getEntityManagerFactory().getCache();
+		cache.evict(entity.getClass(), entity.getIdentity());
+		 */
 		
 	}
 
@@ -83,26 +95,6 @@ public class AuctionService {
 		
 		return auction;
 	}
-	
-	/** old code ... **/
-	/*
-	@GET 
-	@Path("/people/{identity}")
-	public Person getPeople (@PathParam("identity") Long identity) {
-		return null;	
-	}
-
-	@GET
-	@Path("/people/{identity}/auctions")
-	public Set<Auction> getAuctions (@PathParam("identity") Long identity) {
-		return null;
-	}
-	
-	@GET
-	@Path("/people/{identity}/bids")
-	public Set<Bid> getBids (@PathParam("identity") Long identity) {
-		return null;
-	}*/
 	
 }
 

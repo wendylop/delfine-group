@@ -1,6 +1,7 @@
 package de.sb.broker.rest;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,15 +37,16 @@ public class PersonService {
 			@QueryParam("group") Group group,
 			@QueryParam("name") Name name,
 			@QueryParam("address") Address address,
-			@QueryParam("contact") Contact contact){
+			@QueryParam("contact") Contact contact
+			){
 		
-		TypedQuery<Person> query = em.createQuery("select p from Person as p where"
+		TypedQuery<Long> query = em.createQuery("select p.identity from Person as p where"
 				+ "(:alias is null or p.alias = :alias) and"
 				+ "(:group is null or p.group = :group) and"
 				+ "(:name is null or p.name = :name) and"
 				+ "(:address is null or p.address = :address) and"
 				+ "(:contact is null or p.contact = :contact)" , 
-				Person.class);
+				Long.class);
 		
 		query.setParameter("alias", alias);
 		query.setParameter("group", group);
@@ -52,7 +54,16 @@ public class PersonService {
 		query.setParameter("address", address);
 		query.setParameter("contact", contact);
 		
-		List<Person> people = query.getResultList();
+
+		/**TODO
+		if(maxResults > 0) query.setMaxResults(maxResults);		
+		if(firstResult > 0) query.setFirstResult(firstResult);*/
+		
+		//TODO ergebnis sortieren, Array / sortedset, nach alias
+		List<Long> peopleIds = query.getResultList();
+		List<Person> people = new ArrayList<Person>();
+		
+		//TODO for schleife über alle ids find
 		
 		return people;
 	}
@@ -63,15 +74,15 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}")
-	public Person getPerson(@PathParam("identity") Long identity){
+	public Person getPerson(@PathParam("identity") long identity){
 		
-		TypedQuery<Person> query = em.createQuery("select p from Person as p where"
-				+ "(:identity = p.identity)", 
-				Person.class);
+		//TypedQuery<Person> query = em.createQuery("select p from Person as p where"
+		//		+ "(:identity = p.identity)", 
+		//		Person.class);
+
+		//query.setParameter("identity", identity);
 		
-		query.setParameter("identity", identity);
-		
-		Person person = query.getSingleResult();
+		Person person = em.find(Person.class, identity);
 		
 		return person;
 	}
@@ -88,11 +99,13 @@ public class PersonService {
 				+ "(:identity = p.identity)", 
 				Person.class);
 		
+		//TODO find verwenden
+		
 		query.setParameter("identity", identity);
 		
 		Person person = query.getSingleResult();
 		
-		return person.auctions;
+		return person.getAuctions();//TODO getAuctions() in Person einfügen; rückgabe sortieren: toArray(new Auction[0])  
 	}
 	
 	/*
