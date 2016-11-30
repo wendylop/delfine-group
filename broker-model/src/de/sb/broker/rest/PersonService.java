@@ -2,7 +2,9 @@ package de.sb.broker.rest;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -99,8 +101,11 @@ public class PersonService {
 	public Set<Auction> getSomeonesAuctions(@PathParam("identity") long identity){
 		
 		Person person = em.find(Person.class, identity);
-
-		return person.getAuctions();//TODO rückgabe sortieren: toArray(new Auction[0])  
+		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
+		auctionsArray.addAll(person.getAuctions());
+		
+		auctionsArray.sort( (a, b) -> (int)a.getClosureTimestamp() - (int)b.getClosureTimestamp() );
+		return new HashSet<Auction>(auctionsArray);
 
 	}
 	

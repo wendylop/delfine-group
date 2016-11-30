@@ -58,6 +58,9 @@ CREATE TABLE Bid (
 	FOREIGN KEY (auctionReference) REFERENCES Auction (auctionIdentity) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+Create table Document (
+) ENGINE=InnoDB;
+
 -- define views
 CREATE ALGORITHM=MERGE VIEW JoinedEntity AS
 SELECT *

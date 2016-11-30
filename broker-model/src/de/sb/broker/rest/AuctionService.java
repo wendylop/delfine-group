@@ -3,6 +3,8 @@ package de.sb.broker.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Cache;
 //import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -85,10 +87,39 @@ public class AuctionService {
 		 * TODO implement
 		 */
 		/*
-		cache = em.getEntityManagerFactory().getCache();
-		cache.evict(entity.getClass(), entity.getIdentity());
+
 		 */
+
+		TypedQuery<Long> qa = em.createQuery("select a.identity from Auction as a where"
+				+ "(:title is null or a.title = :title) and"
+				+ "(:unitCount is null or a.unitCount = :unitCount) and"
+				+ "(:askingPrice is null or a.askingPrice = :askingPrice) and"
+				+ "(:closureTimestamp is null or a.closureTimestamp = :closureTimestamp) and"
+				+ "(:description is null or a.description = :description) and"
+				+ "(:seller is null or a.seller = :seller)" , 
+				Long.class);
 		
+		qa.setParameter("title", template.getTitle());
+		qa.setParameter("unitCount", template.getUnitCount());
+		qa.setParameter("askingPrice", template.getAskingPrice());
+		qa.setParameter("closureTimestamp", template.getClosureTimestamp());
+		qa.setParameter("description", template.getDescription());
+		qa.setParameter("seller", template.getSeller());
+
+		
+		
+		List<Long> auctionIds = qa.getResultList();
+		List<Auction> auctions = new ArrayList<Auction>();
+		
+		//for-Schleife über alle IDs
+		for(Long id : auctionIds){
+			auctions.add(em.find(Auction.class, id));
+		}
+		
+		//Frage: Wie Zugriff auf alle Auctions
+		
+		//Verwendung? cache = em.getEntityManagerFactory().getCache();
+		//cache.evict(entity.getClass(), entity.getIdentity());
 	}
 
 	/*
