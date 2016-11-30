@@ -2,13 +2,17 @@ package de.sb.broker.rest;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 //import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -38,7 +42,9 @@ public class PersonService {
 			@QueryParam("group") Group group,
 			@QueryParam("name") Name name,
 			@QueryParam("address") Address address,
-			@QueryParam("contact") Contact contact
+			@QueryParam("contact") Contact contact,
+			@QueryParam("firstResult") int firstResult,
+			@QueryParam("maxResults") int maxResults
 			){
 		
 		TypedQuery<Long> query = em.createQuery("select p.identity from Person as p where"
@@ -54,17 +60,19 @@ public class PersonService {
 		query.setParameter("name", name);
 		query.setParameter("address", address);
 		query.setParameter("contact", contact);
-		
-
-		/**TODO
 		if(maxResults > 0) query.setMaxResults(maxResults);		
-		if(firstResult > 0) query.setFirstResult(firstResult);*/
+		if(firstResult > 0) query.setFirstResult(firstResult);
 		
-		//TODO ergebnis sortieren, Array / sortedset, nach alias
 		List<Long> peopleIds = query.getResultList();
 		List<Person> people = new ArrayList<Person>();
 		
-		//TODO for schleife über alle ids find
+		//for-Schleife über alle IDs
+		for(Long id : peopleIds){
+			people.add(em.find(Person.class, id));
+		}
+		
+		//sort by alias
+		people.sort((a,b) -> a.getAlias().compareTo(b.getAlias()));
 		
 		return people;
 	}
@@ -91,14 +99,9 @@ public class PersonService {
 	public Set<Auction> getSomeonesAuctions(@PathParam("identity") long identity){
 		
 		Person person = em.find(Person.class, identity);
-		
 
 		return person.getAuctions();//TODO rückgabe sortieren: toArray(new Auction[0])  
 
-		
-		
-		
-		return person.getAuctions();//TODO getAuctions() in Person einfügen; rückgabe sortieren: toArray(new Auction[0])  
 	}
 	
 	/*
@@ -111,7 +114,34 @@ public class PersonService {
 		
 		Person person = em.find(Person.class, identity);
 		//TODO define getter
-		return person.getBids();//TODO rückgabe sortieren: toArray(new Auction[0])
+		Set<Bid> bids = person.getBids();
+		//TODO rückgabe sortieren
+		Bid[] bidArray = bids.toArray(new Bid[0]);		
+		
+		return bids;
+		
+		
+	}
+	
+	/*
+	PUT /{identity}: Creates or modifies a person
+	*/
+	@PUT
+	public void putPerson(Person p){
+		final boolean insert = p.getIdentity() == 0;
+		/*
+		 * TODO write putPerson
+		 * 
+		 * if existent: update person
+		 * 
+		 * else: create new person
+		 * 
+		 */
+		
+		/*
+		cache = em.getEntityManagerFactory().getCache();
+		cache.evict(entity.getClass(), entity.getIdentity());
+		 */
 		
 	}
 }

@@ -1,6 +1,7 @@
 package de.sb.broker.rest;
 
 
+import java.util.ArrayList;
 import java.util.List;
 //import java.util.Set;
 import javax.persistence.EntityManager;
@@ -38,7 +39,7 @@ public class AuctionService {
 			@QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults){
 		
-		TypedQuery<Auction> qa = em.createQuery("select a from Auction as a where"
+		TypedQuery<Long> qa = em.createQuery("select a.identity from Auction as a where"
 				+ "(:title is null or a.title = :title) and"
 				+ "(:minUC is null or a.unitCount >= :minUC) and"
 				+ "(:maxUC is null or a.unitCount <= :maxUC) and"
@@ -46,7 +47,7 @@ public class AuctionService {
 				+ "(:maxAP is null or a.askingPrice <= :maxAP) and"
 				+ "(:maxClosureTimestamp is null or a.closureTimestamp <= :maxClosureTimestamp) and"
 				+ "(:description is null or a.description = :description)", 
-				Auction.class);
+				Long.class);
 		
 		qa.setParameter("title", title);
 		qa.setParameter("minUC", minUnitCount);
@@ -58,8 +59,18 @@ public class AuctionService {
 		if(maxResults > 0) qa.setMaxResults(maxResults);		
 		if(firstResult > 0) qa.setFirstResult(firstResult);
 		
-		List<Auction> auctions = qa.getResultList();
-		//TODO ergebnisse sortieren, nach close date
+		
+		List<Long> auctionIds = qa.getResultList();
+		List<Auction> auctions = new ArrayList<Auction>();
+		
+		//for-Schleife über alle IDs
+		for(Long id : auctionIds){
+			auctions.add(em.find(Auction.class, id));
+		}
+		
+		//sort by close date
+		auctions.sort((a,b) -> Long.compare(a.getClosureTimestamp(),b.getClosureTimestamp()));
+		
 		return auctions;
 	}
 	/*
@@ -71,7 +82,7 @@ public class AuctionService {
 	public void putAuctions(Auction template){
 		final boolean insert = template.getIdentity() == 0;
 		/*
-		 * TODO
+		 * TODO implement
 		 */
 		/*
 		cache = em.getEntityManagerFactory().getCache();
