@@ -65,3 +65,15 @@ FROM BaseEntity
 LEFT OUTER JOIN Person ON personIdentity = identity
 LEFT OUTER JOIN Auction ON auctionIdentity = identity
 LEFT OUTER JOIN Bid ON bidIdentity = identity;
+
+-- define table for document
+CREATE TABLE Document (
+	documentIdentity BIGINT NOT NULL,
+	content MEDIUMBLOB NOT NULL,
+	contentHash BINARY(32) NOT NULL,
+	contentType CHAR(64) NOT NULL,
+	
+	PRIMARY KEY (documentIdentity),
+	UNIQUE KEY (contentHash),
+	FOREIGN KEY (documentIdentity) REFERENCES BaseEntity (identity) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;

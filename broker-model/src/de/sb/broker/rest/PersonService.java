@@ -31,8 +31,8 @@ import de.sb.broker.model.Person.Group;
 @Path("/people")
 public class PersonService {
 	
-	static EntityManagerFactory emf;
-	EntityManager em = emf.createEntityManager();
+	//static EntityManagerFactory emf;
+	//EntityManager em = emf.createEntityManager();
 	
 	/*
 	 * GET /people: Returns the people matching the given criteria, 
@@ -48,6 +48,7 @@ public class PersonService {
 			@QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults
 			){
+		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		TypedQuery<Long> query = em.createQuery("select p.identity from Person as p where"
 				+ "(:alias is null or p.alias = :alias) and"
@@ -86,6 +87,7 @@ public class PersonService {
 	@GET
 	@Path("/{identity}")
 	public Person getPerson(@PathParam("identity") long identity){
+		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		Person person = em.find(Person.class, identity);
 		
@@ -99,8 +101,10 @@ public class PersonService {
 	@GET
 	@Path("/{identity}/auctions")
 	public Set<Auction> getSomeonesAuctions(@PathParam("identity") long identity){
+		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		Person person = em.find(Person.class, identity);
+
 		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
 		auctionsArray.addAll(person.getAuctions());
 		
@@ -115,17 +119,18 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}/bids")
-	public Set<Bid> getSomeonesBids(@PathParam("identity") long identity) {
+	public ArrayList<Bid> getSomeonesBids(@PathParam("identity") long identity) {
+		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		Person person = em.find(Person.class, identity);
-		//TODO define getter
-		Set<Bid> bids = person.getBids();
-		//TODO rückgabe sortieren
-		Bid[] bidArray = bids.toArray(new Bid[0]);		
+		//define getter
+		ArrayList<Bid> bidsArray = new ArrayList<Bid>();
+		bidsArray.addAll(person.getBids());
 		
-		return bids;
+		//Rückgabe sortieren
+		bidsArray.sort( (a,b) -> Long.compare( a.getPrice(), b.getPrice() ) );
 		
-		
+		return bidsArray;
 	}
 	
 	/*
@@ -133,20 +138,27 @@ public class PersonService {
 	*/
 	@PUT
 	public void putPerson(Person p){
-		final boolean insert = p.getIdentity() == 0;
-		/*
-		 * TODO write putPerson
-		 * 
-		 * if existent: update person
-		 * 
-		 * else: create new person
-		 * 
-		 */
+		EntityManager em = LifeCycleProvider.brokerManager();
+		try {
+			final boolean insert = p.getIdentity() == 0;
+			/*
+			 * TODO write putPerson
+			 * 
+			 * if existent: update person
+			 * 
+			 * else: create new person
+			 * 
+			 */
+			
+			/*
+			cache = em.getEntityManagerFactory().getCache();
+			cache.evict(entity.getClass(), entity.getIdentity());
+			 */
+			em.getTransaction().commit();
+		} finally {
+			em.getTransaction().begin();
+		}
 		
-		/*
-		cache = em.getEntityManagerFactory().getCache();
-		cache.evict(entity.getClass(), entity.getIdentity());
-		 */
-		
+
 	}
 }
