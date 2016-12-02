@@ -86,7 +86,9 @@ public class PersonService {
 		}
 		
 		//sort by alias
-		people.sort((a,b) -> a.getAlias().compareTo(b.getAlias()));
+		//people.sort((a,b) -> a.getAlias().compareTo(b.getAlias()));
+		
+		people.sort(Comparator.comparing(Person::getAlias));
 		
 		return people;
 	}
@@ -119,8 +121,15 @@ public class PersonService {
 		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
 		auctionsArray.addAll(person.getAuctions());
 		
-		auctionsArray.sort( (a, b) -> (int)a.getClosureTimestamp() - (int)b.getClosureTimestamp() );
+		//set comparator to compare by different values in case some have the same result
+		final Comparator<Auction> comparator = Comparator
+				.comparingLong(Auction::getClosureTimestamp)
+				.thenComparing(Auction::getCreationTimestamp)
+				.thenComparing(Auction::getIdentity);
+		auctionsArray.sort(comparator);
+		
 		return new HashSet<Auction>(auctionsArray);
+		
 
 	}
 	
@@ -139,7 +148,12 @@ public class PersonService {
 		bidsArray.addAll(person.getBids());
 		
 		//Rückgabe sortieren
-		bidsArray.sort( (a,b) -> Long.compare( a.getPrice(), b.getPrice() ) );
+		//bidsArray.sort( (a,b) -> Long.compare( a.getPrice(), b.getPrice() ) );
+		bidsArray.sort(Comparator
+				.comparing(Bid::getPrice)
+				.thenComparing(Bid::getCreationTimestamp)
+				.thenComparing(Bid::getIdentity));
+		
 		
 		return bidsArray;
 	}
@@ -148,26 +162,63 @@ public class PersonService {
 	PUT /{identity}: Creates or modifies a person
 	*/
 	@PUT
-	public void putPerson(Person p){
+	@Consumes({"application/xml", "application/json"})
+	public Long putPerson(
+			@Valid Person p,
+			@HeaderParam("Authorization") final String authentication
+			){
+		
 		EntityManager em = LifeCycleProvider.brokerManager();
+		final Person requester = LifeCycleProvider.authenticate(authentication);
+		final boolean persist = p.getIdentity() == 0;
+		final Person person;
+		
 		try {
-			final boolean insert = p.getIdentity() == 0;
-			/*
-			 * TODO write putPerson
-			 * 
-			 * if existent: update person
-			 * 
-			 * else: create new person
-			 * 
-			 */			
 			/*
 			cache = em.getEntityManagerFactory().getCache();
 			cache.evict(entity.getClass(), entity.getIdentity());
 			 */
-			em.getTransaction().commit();
-		} finally {
-			em.getTransaction().begin();
+			
+			/*
+			 * if existent: update person
+			 * else: create new person
+			 */
+			if(persist){
+				//TODO person parameters?
+				person = new Person();
+			} else {
+				person = em.find(Person.class, p.getIdentity());
+				if (person == null) throw new NotFoundException();
+				/* TODO compare requester.getIdentity() to...?
+				 * if (requester.getIdentity() != person.getSellerReference()) throw new ForbiddenException();
+				 */
+				//if (person.isSealed()) throw new ForbiddenException();
+			}
+			
+			person.setAlias(p.getAlias());
+			person.setPasswordHash(p.getPasswordHash());
+			person.setGroup(p.getGroup());
+			person.setVersion(p.getVersion());
+
+			if (persist){
+				em.persist(person);	
+			} else {
+				em.flush();
+			}
+			
+			try { 
+				em.getTransaction().commit();
+			} finally {
+				em.getTransaction().begin();
+			}
+			
+		} catch (ConstraintViolationException e) {
+			throw new ClientErrorException(Status.BAD_REQUEST);
+		} catch (RollbackException e) {
+			throw new ClientErrorException(Status.CONFLICT);
 		}
+		
+		return p.getIdentity();
 	}
 	
 	/*

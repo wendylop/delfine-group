@@ -2,6 +2,7 @@ package de.sb.broker.rest;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Cache;
@@ -88,7 +89,11 @@ public class AuctionService {
 		}
 		
 		//sort by close date
-		auctions.sort((a,b) -> Long.compare(a.getClosureTimestamp(),b.getClosureTimestamp()));
+		//auctions.sort((a,b) -> Long.compare(a.getClosureTimestamp(),b.getClosureTimestamp()));
+		auctions.sort( Comparator
+				.comparing(Auction::getClosureTimestamp)
+				.thenComparing(Auction::getCreationTimestamp)
+				.thenComparing(Auction::getIdentity));
 		
 		return auctions;
 	}
@@ -104,7 +109,7 @@ public class AuctionService {
 	@PUT
 	@Consumes({"application/xml", "application/json"})
 	public Long putAuctions(
-			Auction template,
+			@Valid Auction template,
 			@HeaderParam("Authorization") final String authentication
 			){
 		
@@ -143,17 +148,19 @@ public class AuctionService {
 			} else {
 				em.flush();
 			}
-
-			em.getTransaction().commit();
+			
+			try {
+				em.getTransaction().commit();
+			} finally {
+				em.getTransaction().begin();
+			}
 			
 		} catch (ConstraintViolationException e) {
 			throw new ClientErrorException(Status.BAD_REQUEST);
 		} catch (RollbackException e) {
 			throw new ClientErrorException(Status.CONFLICT);
-		} finally {
-			em.getTransaction().begin();
 		}
-	
+		
 		return auction.getIdentity();
 	}
 
@@ -178,8 +185,8 @@ public class AuctionService {
 	@GET
 	@Path("/{identity}/bid")
 	@Produces({"application/xml", "application/json"})
-	//@Bid.XmlBidderAsReferenceFilter
-	//@Bid.XmlAuctionAsReferenceFilter
+	@Bid.XmlBidderAsReferenceFilter
+	@Bid.XmlAuctionAsReferenceFilter
 	public Bid getBidForAuction(
 			@PathParam("identity") long identity,
 			@HeaderParam("Authorization") final String authentication
