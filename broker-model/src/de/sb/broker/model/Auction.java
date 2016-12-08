@@ -128,6 +128,8 @@ public class Auction extends BaseEntity {
 		this.description = description;
 	}
 
+	@XmlElement
+	@XmlSellerAsEntityFilter
 	public Person getSeller() {
 		return seller;
 	}
@@ -136,9 +138,17 @@ public class Auction extends BaseEntity {
 		this.seller = seller;
 	}
 
+	@XmlElement
+	@XmlSellerAsReferenceFilter
 	public long getSellerReference() {
 		return this.seller == null ? 0 : this.seller.getIdentity();
 	}
+	
+	 @XmlElement 
+	 @XmlBidsAsEntityFilter
+	 public Set<Bid> getBids() {
+	        return this.bids;
+	    }
 
 	public Bid getBid(Person bidder) {
 		for (Bid bid : this.bids) {
