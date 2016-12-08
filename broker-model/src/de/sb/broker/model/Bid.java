@@ -68,14 +68,20 @@ public class Bid extends BaseEntity  {
 		return auction;
 	}
 	
+	@XmlElement
+    @XmlAuctionAsReferenceFilter
 	public long getAuctionReference() {
 		return this.auction == null ? 0 : this.auction.getIdentity();
 	}
 	
+	@XmlElement 
+    @XmlBidderAsEntityFilter
 	public Person getBidder() {
 		return bidder;
 	}
 	
+	@XmlElement
+    @XmlBidderAsReferenceFilter
 	public long getBidderReference() {
 		return this.bidder == null ? 0 : this.bidder.getIdentity();
 	}
