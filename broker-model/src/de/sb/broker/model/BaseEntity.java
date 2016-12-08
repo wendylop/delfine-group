@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 @DiscriminatorColumn(name = "discriminator", discriminatorType = DiscriminatorType.STRING)
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name="BaseEntity")
-@XmlSeeAlso({Auction.class, Bid.class, Person.class})
+@XmlSeeAlso({Auction.class, Bid.class, Person.class, Document.class})
 public class BaseEntity implements Comparable<BaseEntity>{
 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
