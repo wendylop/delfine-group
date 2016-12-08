@@ -31,67 +31,68 @@ import de.sb.java.validation.Inequal;
 @Table(schema = "broker", name = "Auction", indexes = @Index(columnList = "closureTimestamp", unique = true))
 @PrimaryKeyJoinColumn(name = "auctionIdentity")
 @Inequal(leftAccessPath = { "closureTimestamp" }, rightAccessPath = { "creationTimestamp" })
-@XmlType(name="Auction")
+@XmlType(name = "Auction")
 
 public class Auction extends BaseEntity {
 
 	@Column(nullable = false, updatable = true, length = 255)
 	@Size(min = 1, max = 255)
 	@NotNull
-	@XmlElement //TODO namen nur wenn abweicht
+	@XmlElement // TODO namen nur wenn abweicht
 	private String title;
-	
+
 	@Column(nullable = false, updatable = true)
 	@Min(1)
 	@NotNull
-	@XmlElement(name="unitCount")
+	@XmlElement(name = "unitCount")
 	private short unitCount;
-	
+
 	@Column(nullable = false, updatable = true)
 	@NotNull
 	@Min(0)
-	@XmlElement(name="askingPrice")
+	@XmlElement(name = "askingPrice")
 	private long askingPrice;
-	
+
 	@Column(nullable = false, updatable = true)
 	@NotNull
-	@XmlElement(name="closureTimestamp")
+	@XmlElement(name = "closureTimestamp")
 	private long closureTimestamp;
-	
+
 	@Column(nullable = false, updatable = true, length = 8189)
 	@Size(min = 1, max = 8189)
 	@NotNull
-	@XmlElement(name="description")
+	@XmlElement(name = "description")
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "sellerReference", nullable = false, updatable = false)
-	//@NotNull, 
+	// @NotNull,
 	private Person seller;
-	
+
 	@OneToMany(mappedBy = "auction")
-	//@NotNull
+	// @NotNull
 	private Set<Bid> bids;
 
 	public Auction(Person seller) {
-		//TODO defaults
+		// TODO defaults
 		this.title = "";
 		this.unitCount = 0;
 		this.askingPrice = 0;
-		this.closureTimestamp = System.currentTimeMillis() + (30*24*60*60*1000);;// +30*24*60*60*1000 oder Duration
+		this.closureTimestamp = System.currentTimeMillis() + (30 * 24 * 60 * 60 * 1000);
+		;// +30*24*60*60*1000 oder Duration
 		this.description = "";
 		this.seller = seller;
 		bids = new HashSet<Bid>();
 	}
-	
-	protected Auction(){
+
+	protected Auction() {
 		this(null);
 	}
 
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -103,11 +104,11 @@ public class Auction extends BaseEntity {
 	public void setUnitCount(short unitCount) {
 		this.unitCount = unitCount;
 	}
-	
+
 	public long getAskingPrice() {
 		return askingPrice;
 	}
-	
+
 	public void setAskingPrice(long askingPrice) {
 		this.askingPrice = askingPrice;
 	}
@@ -115,7 +116,7 @@ public class Auction extends BaseEntity {
 	public long getClosureTimestamp() {
 		return closureTimestamp;
 	}
-	
+
 	public void setClosureTimestamp(long closureTimestamp) {
 		this.closureTimestamp = closureTimestamp;
 	}
@@ -133,8 +134,8 @@ public class Auction extends BaseEntity {
 	public Person getSeller() {
 		return seller;
 	}
-	
-	public void setSeller (Person seller){
+
+	public void setSeller(Person seller) {
 		this.seller = seller;
 	}
 
@@ -143,12 +144,12 @@ public class Auction extends BaseEntity {
 	public long getSellerReference() {
 		return this.seller == null ? 0 : this.seller.getIdentity();
 	}
-	
-	 @XmlElement 
-	 @XmlBidsAsEntityFilter
-	 public Set<Bid> getBids() {
-	        return this.bids;
-	    }
+
+	@XmlElement
+	@XmlBidsAsEntityFilter
+	public Set<Bid> getBids() {
+		return this.bids;
+	}
 
 	public Bid getBid(Person bidder) {
 		for (Bid bid : this.bids) {
@@ -159,50 +160,52 @@ public class Auction extends BaseEntity {
 		return null;
 	}
 
-	@XmlElement(name="closed")
+	@XmlElement(name = "closed")
 	public boolean isClosed() {
 		return this.closureTimestamp > System.currentTimeMillis();
 	}
 
-	@XmlElement(name="sealed")
+	@XmlElement(name = "sealed")
 	public boolean isSealed() {
 		return this.isClosed() || !bids.isEmpty();
 	}
 
-	
 	/**
 	 * Filter annotation for associated sellers marshaled as entities.
 	 */
-	@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
+	@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
 	@Retention(RetentionPolicy.RUNTIME)
 	@EntityFiltering
 	@SuppressWarnings("all")
 	static public @interface XmlSellerAsEntityFilter {
-		static final class Literal extends AnnotationLiteral<XmlSellerAsEntityFilter> implements XmlSellerAsEntityFilter {}
+		static final class Literal extends AnnotationLiteral<XmlSellerAsEntityFilter>
+				implements XmlSellerAsEntityFilter {
+		}
 	}
 
 	/**
 	 * Filter annotation for associated sellers marshaled as references.
 	 */
-	@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
+	@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
 	@Retention(RetentionPolicy.RUNTIME)
 	@EntityFiltering
 	@SuppressWarnings("all")
 	static public @interface XmlSellerAsReferenceFilter {
-		static final class Literal extends AnnotationLiteral<XmlSellerAsReferenceFilter> implements XmlSellerAsReferenceFilter {}
+		static final class Literal extends AnnotationLiteral<XmlSellerAsReferenceFilter>
+				implements XmlSellerAsReferenceFilter {
+		}
 	}
 
 	/**
 	 * Filter annotation for associated bids marshaled as entities.
 	 */
-	@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
+	@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
 	@Retention(RetentionPolicy.RUNTIME)
 	@EntityFiltering
 	@SuppressWarnings("all")
 	static public @interface XmlBidsAsEntityFilter {
-		static final class Literal extends AnnotationLiteral<XmlBidsAsEntityFilter> implements XmlBidsAsEntityFilter {}
+		static final class Literal extends AnnotationLiteral<XmlBidsAsEntityFilter> implements XmlBidsAsEntityFilter {
+		}
 	}
-
-	
 
 }
