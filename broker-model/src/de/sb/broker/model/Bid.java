@@ -26,7 +26,7 @@ import de.sb.java.validation.Inequal;
 @PrimaryKeyJoinColumn(name = "bidIdentity")
 @Inequal(leftAccessPath = "price", rightAccessPath = { "auction", "askingPrice" } , operator = Inequal.Operator.GREATER_EQUAL )
 @Inequal(leftAccessPath = { "auction", "seller" , "identity" }, rightAccessPath = {  "bidder" , "identity" } , operator = Inequal.Operator.NOT_EQUAL)
-@XmlType(name="Bid")
+@XmlType
 public class Bid extends BaseEntity  {
 
     @Min(value = 1)

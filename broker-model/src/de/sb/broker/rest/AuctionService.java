@@ -34,10 +34,6 @@ import de.sb.broker.model.Person;
 
 @Path("/auctions")
 public class AuctionService {
-	
-	//static EntityManagerFactory emf;
-	//EntityManager em = emf.createEntityManager();
-	
 	/*
 	 * GET /auctions: Returns the auctions matching the given criteria, 
 	 * with null or missing parameters identifying omitted criteria.
@@ -53,9 +49,13 @@ public class AuctionService {
 			@QueryParam("minAP") Long minAskingPrice,
 			@QueryParam("maxAP") Long maxAskingPrice,
 			@QueryParam("maxClosureTimestamp") Long maxClosureTimestamp,
+			@QueryParam("minClosureTimestamp") Long minClosureTimestamp,
 			@QueryParam("description") String description,
 			@QueryParam("firstResult") int firstResult,
-			@QueryParam("maxResults") int maxResults){
+			@QueryParam("maxResults") int maxResults,
+			@QueryParam("minCreationTimestamp") int minCreationTimestamp,//TODO
+			@QueryParam("maxCreationTimestamp") int maxCreationTimestamp//TODO
+			){
 		
 		EntityManager em = LifeCycleProvider.brokerManager();
 		
@@ -66,6 +66,7 @@ public class AuctionService {
 				+ "(:minAP is null or a.askingPrice >= :minAP) and"
 				+ "(:maxAP is null or a.askingPrice <= :maxAP) and"
 				+ "(:maxClosureTimestamp is null or a.closureTimestamp <= :maxClosureTimestamp) and"
+				+ "(:minClosureTimestamp is null or a.closureTimestamp <= :minClosureTimestamp) and"
 				+ "(:description is null or a.description = :description)", 
 				Long.class);
 		
@@ -75,10 +76,10 @@ public class AuctionService {
 		qa.setParameter("minAP", minAskingPrice);
 		qa.setParameter("maxAP", maxAskingPrice);
 		qa.setParameter("maxClosureTimestamp", maxClosureTimestamp);
+		qa.setParameter("minClosureTimestamp", minClosureTimestamp);
 		qa.setParameter("description", description);
 		if(maxResults > 0) qa.setMaxResults(maxResults);		
 		if(firstResult > 0) qa.setFirstResult(firstResult);
-		
 		
 		List<Long> auctionIds = qa.getResultList();
 		List<Auction> auctions = new ArrayList<Auction>();

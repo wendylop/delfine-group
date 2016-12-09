@@ -35,16 +35,13 @@ import de.sb.broker.model.Address;
 import de.sb.broker.model.Auction;
 import de.sb.broker.model.Bid;
 import de.sb.broker.model.Contact;
+import de.sb.broker.model.Document;
 import de.sb.broker.model.Name;
 import de.sb.broker.model.Person;
 import de.sb.broker.model.Person.Group;
 
 @Path("/people")
-public class PersonService {
-	
-	//static EntityManagerFactory emf;
-	//EntityManager em = emf.createEntityManager();
-	
+public class PersonService {	
 	/*
 	 * GET /people: Returns the people matching the given criteria, 
 	 * with null or missing parameters identifying omitted criteria.
@@ -57,7 +54,7 @@ public class PersonService {
 			@QueryParam("address") Address address,
 			@QueryParam("contact") Contact contact,
 			@QueryParam("firstResult") int firstResult,
-			@QueryParam("maxResults") int maxResults
+			@QueryParam("maxResults") int maxResults //TODO min- & maxCreationTimestamp
 			){
 		EntityManager em = LifeCycleProvider.brokerManager();
 		
@@ -173,26 +170,18 @@ public class PersonService {
 		final boolean persist = p.getIdentity() == 0;
 		final Person person;
 		
-		try {
-			/*
-			cache = em.getEntityManagerFactory().getCache();
-			cache.evict(entity.getClass(), entity.getIdentity());
-			 */
-			
+		try {			
 			/*
 			 * if existent: update person
 			 * else: create new person
 			 */
 			if(persist){
-				//TODO person parameters?
 				person = new Person();
-			} else {
+			} else if (requester.getGroup() == Group.ADMIN || requester.getIdentity() == p.getIdentity()){
 				person = em.find(Person.class, p.getIdentity());
 				if (person == null) throw new NotFoundException();
-				/* TODO compare requester.getIdentity() to...?
-				 * if (requester.getIdentity() != person.getSellerReference()) throw new ForbiddenException();
-				 */
-				//if (person.isSealed()) throw new ForbiddenException();
+			} else {
+				throw new ForbiddenException();
 			}
 			
 			person.setAlias(p.getAlias());
@@ -291,4 +280,18 @@ public class PersonService {
 		}
 		return person.getIdentity();
 	}
+	
+	//TODO GET /services/people/4711/avatar : avatar als dokument zurück liefern
+	//byte[] und mimetype/contenttype
+	//return responsebuilder.ok(content, contenttype).build();
+	
+	public Document getAvatar(){
+		return null;
+	}
+	
+	//TODO PUT /services/people/4711/avatar : dokument hochladen (img)
+	//beide mit @consume bzw. @produces mit wildcard(schaltet marshaling aus)
+	//argument: mimetype/contenttype mit @headerparam("Content-type")
+	
+	
 }

@@ -1,0 +1,215 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="author" content="Sascha Baumeister" />
+		<meta name="dcterms.rightsHolder" content="Sascha Baumeister" />
+		<meta name="dcterms.rights" content="all rights reserved" />
+		<meta name="dcterms.dateCopyrighted" content="2013-2015" />
+
+		<title>AJAX Auction Broker System</title>
+		<link rel="stylesheet" href="stylesheet.css" />
+
+		<script src="js/util.js" ></script>
+		<script src="js/session-context.js"></script>
+		<script src="js/controller.js"></script>
+		<script src="js/welcome-controller.js"></script>
+		<script src="js/preferences-controller.js"></script>
+		<script src="js/closed-auctions-controller.js"></script>
+		<script src="js/open-auctions-controller.js"></script>
+		<script src="js/application.js"></script>
+
+
+		<template id="login-template">
+			<section class="login">
+				<fieldset>
+					<legend>Login</legend>
+					<div>
+						<label class="horizontal">Alias</label>
+						<input type="text" required="required" maxlength="16" />
+					</div>
+					<div>
+						<label class="horizontal">Password</label>
+						<input type="password" required="required" maxlength="16" />
+					</div>
+				</fieldset>
+				<button type="button">login</button>
+			</section>
+		</template>
+
+
+		<template id="preferences-template">
+			<section class="preferences">
+				<fieldset>
+					<legend>Account</legend>
+					<div>
+						<label class="horizontal">Group</label>
+						<input type="text" readonly="readonly" />
+					</div>
+					<div>
+						<label class="horizontal">Alias</label>
+						<input type="text" readonly="readonly" />
+					</div>
+					<div>
+						<label class="horizontal">Password</label>
+						<input type="password" maxlength="16" />
+					</div>
+					<div>
+						<label class="horizontal">Forename</label>
+						<input type="text" required="required" maxlength="31" />
+					</div>
+					<div>
+						<label class="horizontal">Surname</label>
+						<input type="text" required="required" maxlength="31" />
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Address</legend>
+					<div>
+						<label class="horizontal">Street</label>
+						<input type="text" required="required" maxlength="63" />
+					</div>
+					<div>
+						<label class="horizontal">ZIP</label>
+						<input type="text" required="required" pattern="^[0-9]{5}$" />
+					</div>
+					<div>
+						<label class="horizontal">City</label>
+						<input type="text" required="required" maxlength="63" />
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Contact</legend>
+					<div>
+						<label class="horizontal">Email</label>
+						<input type="email" required="required" maxlength="63" />
+					</div>
+					<div>
+						<label class="horizontal">Phone</label>
+						<input type="tel" required="required" maxlength="63" />
+					</div>
+				</fieldset>
+				<button type="button">send</button>
+			</section>
+		</template>
+
+
+		<template id="closed-seller-auctions-template">
+			<section class="closed-seller-auctions">
+				<h1>Your closed Auctions</h1>
+				<table class="auctions">
+					<thead>
+						<tr>
+							<th>Winner</th>
+							<th>Begin</th>
+							<th>End</th>
+							<th>Title</th>
+							<th>Units</th>
+							<th>Min (&euro;)</th>
+							<th>Win (&euro;)</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</section>
+		</template>
+
+
+		<template id="closed-bidder-auctions-template">
+			<section class="closed-bidder-auctions">
+				<h1>Your Bids in closed Auctions</h1>
+				<table class="auctions">
+					<thead>
+						<tr>
+							<th>Seller</th>
+							<th>Winner</th>
+							<th>Begin</th>
+							<th>End</th>
+							<th>Title</th>
+							<th>Units</th>
+							<th>Min (&euro;)</th>
+							<th>Bid (&euro;)</th>
+							<th>Win (&euro;)</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</section>
+		</template>
+
+
+		<template id="open-auctions-template">
+			<section class="open-auctions">
+				<h1>Open Auctions</h1>
+				<table class="auctions">
+					<thead>
+						<tr>
+							<th>Seller</th>
+							<th>Begin</th>
+							<th>End</th>
+							<th>Title</th>
+							<th>Units</th>
+							<th>Min (&euro;)</th>
+							<th>Bid (&euro;)</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<button type="button" title="create auction">new</button>
+			</section>
+		</template>
+
+
+		<template id="auction-form-template">
+			<section class="auction-form">
+				<fieldset>
+					<legend>Create/Modify Auction</legend>
+					<div>
+						<label class="horizontal">Begin</label>
+						<input type="text" readonly="readonly" />
+					</div>
+					<div>
+						<label class="horizontal">End</label>
+						<input type="text" readonly="readonly" />
+					</div>
+					<div>
+						<label class="horizontal">Title</label>
+						<input type="text" required="required" maxlength="255" />
+					</div>
+					<div>
+						<label class="horizontal"> Description</label>
+						<textarea rows="5" required="required" maxlength="8189"></textarea>
+					</div>
+					<div>
+						<label class="horizontal">Units</label>
+						<input type="number" required="required" min="1" value="1" />
+					</div>
+					<div>
+						<label class="horizontal">Min Bid (&euro;)</label>
+						<input type="number" required="required" min="0.01" step="0.01" value="0.01" />
+					</div>
+				</fieldset>
+				<button type="button">send</button>
+			</section>
+		</template>
+	</head>
+
+
+	<body>
+		<header>
+			<nav class="horizontal">
+				<ul>
+					<li><a>Login</a></li>
+					<li><a>Open Auctions</a></li>
+					<li><a>Closed Auctions</a></li>
+					<li><a>Preferences</a></li>
+				</ul>
+			</nav>
+		</header>
+		<main></main>
+		<footer>
+			<span>Status: </span>
+			<output></output>
+		</footer>
+	</body>
+</html>

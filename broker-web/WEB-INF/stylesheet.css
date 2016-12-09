@@ -1,0 +1,188 @@
+/*
+ * Script: stylesheet.css
+ *        the broker application's CSS3 style sheet. Navigator design adapted
+ *		  from tutorial of the Web Designer Wall:
+ *        http://webdesignerwall.com/tutorials/css3-dropdown-menu
+ */
+body {
+	width: 60em; margin: 2em 3em; line-height: 1.5em;
+	font-size: 14px; font-family: Arial, Helvetica, sans-serif;
+	color: #221100; background: #ebebeb;
+}
+
+section {
+	display: block;
+}
+
+main > section {
+	margin-bottom: 1.5em;
+}
+
+h1 {
+	margin-bottom: .4em; font-size: 140%;
+}
+
+h2 {
+	margin-bottom: .2em; font-size: 120%;
+}
+
+fieldset {
+	margin: 0; background: #e2e2e2;
+}
+
+legend {
+	font-size: 60%;
+}
+
+textarea {
+	font-size: inherit; font-family: inherit;
+}
+
+button, input[type="button"] {
+	border-radius: 0.2em; padding: 0.1em 1.5em;
+	color: #444444; background: linear-gradient(#ebebeb,  #a1a1a1);
+	font-weight: bold; text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+a:hover img {
+	opacity: 0.7;
+}
+
+label.horizontal {
+	display: inline-block; width: 5em; text-align: right;
+	padding: 0 0.5em; vertical-align: middle;
+}
+
+
+nav ul {
+	padding: .55em .5em 0 .5em;
+	border: solid 1px #6d6d6d; border-radius: 2em; background: linear-gradient(#a9a9a9,  #7a7a7a);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+}
+
+nav li {
+	padding: 0 0 .6em 0; margin: 0 .4em;
+	list-style: none;
+}
+
+nav.horizontal li {
+	display: inline-block;
+}
+
+nav a {
+	display: inline-block; padding: .4em 1.5em; margin: 0;
+	color: #e7e5e5; font-weight: bold; border-radius: 1.6em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+}
+
+nav li.selected a, nav li:hover a {
+	color: #444444; background: linear-gradient(#ebebeb,  #a1a1a1); border-top: solid 1px #f0f0f0; border-radius: 0.2em;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .8); box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+}
+
+
+footer .success {
+	color: green;
+}
+
+footer .warning {
+	color: orange; font-weight: bold;
+}
+
+footer .error {
+	color: red; font-weight: bolder;
+}
+
+
+table.auctions {
+	width: 60em;
+	background-color: #e2e2e2;
+	border-collapse: collapse; border: 2px groove #f0f0f0;
+}
+
+table.auctions th {
+	padding: 5px 3px 5px 3px; text-align: left;
+	background-color: white;
+	border-left: 1px solid white;
+}
+
+table.auctions td {
+	padding: 3px; text-align: left;
+	border-left: 1px solid white;
+}
+
+
+section.login input {
+	width: 20em;
+}
+
+
+section.preferences fieldset:nth-of-type(2) div:nth-of-type(1) input {
+	width: 24em;
+}
+
+section.preferences fieldset:nth-of-type(2) div:nth-of-type(n+2):nth-of-type(-n+3) {
+	display: inline;
+}
+
+section.preferences fieldset:nth-of-type(2) div:nth-of-type(2) input {
+	width: 6em;
+}
+
+section.preferences fieldset:nth-of-type(2) div:nth-of-type(3) label {
+	width: 2em;
+}
+
+section.preferences fieldset:nth-of-type(2) div:nth-of-type(3) input {
+	width: 14.05em;
+}
+
+section.preferences fieldset:nth-of-type(odd) input {
+	width: 24em;
+}
+
+
+section.closed-seller-auctions td:nth-of-type(n+5) {
+	text-align: right;
+}
+
+section.closed-bidder-auctions td:nth-of-type(n+6) {
+	text-align: right;
+}
+
+
+section.open-auctions td:nth-of-type(n+5) {
+	text-align: right;
+}
+
+section.open-auctions td:nth-of-type(7) input[type="number"] {
+	width: 5em;
+}
+
+section.auction-form textarea {
+	vertical-align: middle;
+}
+
+section.auction-form div:nth-of-type(-n+2) input {
+	width: 24em;
+}
+
+section.auction-form div:nth-of-type(3) input {
+	width: 24em;
+}
+
+section.auction-form div:nth-of-type(4) textarea {
+	width: 25.1em;
+}
+
+section.auction-form div:nth-of-type(n+5) {
+	display: inline;
+}
+
+section.auction-form div:nth-of-type(5) input {
+	width: 4em;
+}
+
+section.auction-form div:nth-of-type(6) input {
+	width: 13.1em;
+}

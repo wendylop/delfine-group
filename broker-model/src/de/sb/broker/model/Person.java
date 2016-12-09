@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.sun.istack.internal.NotNull;
@@ -26,7 +27,8 @@ import com.sun.istack.internal.NotNull;
 @Entity
 @Table(schema = "broker", name = "Person")
 @PrimaryKeyJoinColumn(name = "personIdentity")
-@XmlType(name="Person")
+@XmlRootElement
+@XmlType
 public class Person extends BaseEntity{
 	
 	@Column(nullable = false, updatable = false, length = 16, unique = true)
