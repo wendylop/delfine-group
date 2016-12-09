@@ -54,7 +54,9 @@ public class PersonService {
 			@QueryParam("address") Address address,
 			@QueryParam("contact") Contact contact,
 			@QueryParam("firstResult") int firstResult,
-			@QueryParam("maxResults") int maxResults //TODO min- & maxCreationTimestamp
+			@QueryParam("maxResults") int maxResults,
+			@QueryParam("minCreationTimestamp") long minCreationTimestamp,
+			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp
 			){
 		EntityManager em = LifeCycleProvider.brokerManager();
 		
@@ -63,7 +65,9 @@ public class PersonService {
 				+ "(:group is null or p.group = :group) and"
 				+ "(:name is null or p.name = :name) and"
 				+ "(:address is null or p.address = :address) and"
-				+ "(:contact is null or p.contact = :contact)" , 
+				+ "(:contact is null or p.contact = :contact) and"
+				+ "(:maxCreationTimestamp is null or p.creationTimestamp <= :maxCreationTimestamp) and"
+				+ "(:minCreationTimestamp is null or p.creationTimestamp <= :minCreationTimestamp) ", 
 				Long.class);
 		
 		query.setParameter("alias", alias);
@@ -71,6 +75,8 @@ public class PersonService {
 		query.setParameter("name", name);
 		query.setParameter("address", address);
 		query.setParameter("contact", contact);
+		query.setParameter("minCreationTimestamp", minCreationTimestamp);
+		query.setParameter("maxCreationTimestamp", maxCreationTimestamp);
 		if(maxResults > 0) query.setMaxResults(maxResults);		
 		if(firstResult > 0) query.setFirstResult(firstResult);
 		
