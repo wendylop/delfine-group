@@ -3,5 +3,34 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/broker-model"/>
+	<classpathentry kind="lib" path="lib/jpa/eclipselink-2.6.4/eclipselink.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-api-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-locator-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/hk2-utils-2.5.0-b05.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/javassist-3.20.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/javax.json-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-bean-validation-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-client.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-common.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-jdk-http-2.23.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-servlet-core.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-container-servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-entity-filtering-2.23.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-guava-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-media-jaxb.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-media-moxy-2.23.2.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/jersey-server.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.antlr-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.asm-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.core-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-rs/jersey-2.23.2/org.eclipse.persistence.moxy-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="lib/jax-val/hibernate-validator-5.1.3/classmate-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jax-val/hibernate-validator-5.1.3/hibernate-validator-5.1.3.Final.jar"/>
+	<classpathentry kind="lib" path="lib/jax-val/hibernate-validator-5.1.3/javax.el-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/jax-val/hibernate-validator-5.1.3/jboss-logging-3.1.3.GA.jar"/>
+	<classpathentry kind="lib" path="lib/java/java-util-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/java/javaee-api-7.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/java/javaee-api-7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
