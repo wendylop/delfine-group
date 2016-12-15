@@ -5,10 +5,12 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.sun.istack.internal.NotNull;
 
 @Embeddable
+@XmlType
 public class Contact {
 	
 	@Column(nullable = false, updatable = true, length = 63, unique = true)

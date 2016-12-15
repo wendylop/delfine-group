@@ -1,5 +1,5 @@
 package de.sb.broker.rest;
-/*
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +20,7 @@ import de.sb.java.net.HttpModuleHandler;
  * LAZY fetching of entities with EclipseLink (dynamic weaving) the following
  * has to be added to the JVM start parameters: -javaagent:[path]eclipselink.jar
  */
-//@Copyright(year = 2013, holders = "Sascha Baumeister")
+@Copyright(year = 2013, holders = "Sascha Baumeister")
 public class ApplicationContainer {
 
 	/**
@@ -34,7 +34,6 @@ public class ApplicationContainer {
 	 * @throws IOException
 	 *             if there is an I/O related problem
 	 */
-	/*
 	static public void main(final String[] args) throws NumberFormatException, IOException {
 		final int servicePort = args.length == 0 ? 80 : Integer.parseInt(args[0]);
 		final URI serviceURI;
@@ -44,7 +43,7 @@ public class ApplicationContainer {
 		} catch (final URISyntaxException exception) {
 			throw new AssertionError();
 		}
-*/
+
 		// Note that server-startup is only required in Java-SE, as any Java-EE
 		// engine must ship a built-in HTTP server
 		// implementation and XML-based configuration. The Factory-Class used is
@@ -52,7 +51,7 @@ public class ApplicationContainer {
 		// type used is Oracle/OpenJDK-specific. Other HTTP server types more
 		// suitable for production environments are
 		// available, such as Apache Tomcat, Grizzly, Simple, etc.
-	/*
+	
 		final ResourceConfig configuration = new ResourceConfig()
 				.packages(ApplicationContainer.class.getPackage().toString()).register(MoxyJsonFeature.class) // edit
 																												// "network.http.accept.default"
@@ -80,5 +79,5 @@ public class ApplicationContainer {
 			container.stop(0);
 		}
 		
-	}*/
+	}
 }

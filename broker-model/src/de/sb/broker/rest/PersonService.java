@@ -163,7 +163,7 @@ public class PersonService {
 	
 	/*
 	PUT /{identity}: Creates or modifies a person
-	*/
+	
 	@PUT
 	@Consumes({"application/xml", "application/json"})
 	public Long putPerson(
@@ -180,7 +180,7 @@ public class PersonService {
 			/*
 			 * if existent: update person
 			 * else: create new person
-			 */
+			 *
 			if(persist){
 				person = new Person();
 			} else if (requester.getGroup() == Group.ADMIN || requester.getIdentity() == p.getIdentity()){
@@ -215,6 +215,8 @@ public class PersonService {
 		
 		return p.getIdentity();
 	}
+	
+	*/
 	
 	/*
 	 * GET /people/requester (new): 

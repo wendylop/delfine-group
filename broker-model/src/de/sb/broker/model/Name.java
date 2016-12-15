@@ -4,11 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import com.sun.istack.internal.NotNull;
 
 @Embeddable
-
+@XmlType
 public class Name {
 	
 	@Column(name = "familyName", nullable = true, updatable = true, insertable=true, length = 31)

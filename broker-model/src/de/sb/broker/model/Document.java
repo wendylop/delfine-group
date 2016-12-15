@@ -1,6 +1,5 @@
 package de.sb.broker.model;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -35,6 +34,8 @@ public class Document extends BaseEntity {
 		@NotNull
 		@Size(min=32, max=32)
 	    private byte[] hash;
+		
+		public Document() {}
 		
 		public Document(byte[] content){
 			this.content = content;
