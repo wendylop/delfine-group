@@ -11,6 +11,7 @@ import com.sun.istack.internal.NotNull;
 
 @Embeddable
 @XmlType
+
 public class Contact {
 	
 	@Column(nullable = false, updatable = true, length = 63, unique = true)

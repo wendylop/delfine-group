@@ -29,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import de.sb.broker.model.Address;
@@ -292,6 +293,29 @@ public class PersonService {
 	//TODO GET /services/people/4711/avatar : avatar als dokument zurück liefern
 	//byte[] und mimetype/contenttype
 	//return responsebuilder.ok(content, contenttype).build();
+	
+	@GET
+	@Path("{identity}/avatar")
+	@Produces({"wildcard"})
+	public Response getAvatar(
+			@HeaderParam("Authorization") final String authentication,
+			@PathParam("identity") final long id
+	) {
+		LifeCycleProvider.authenticate(authentication);
+		
+EntityManager em = LifeCycleProvider.brokerManager();
+		
+		Person person = em.find(Person.class, id);
+		Document document = person.getAvatar();
+		
+		if (document == null){
+			return Response.status(Status.NOT_FOUND).build();
+		}
+			else
+				return Response.ok(document.getContent(), document.getType()).build();
+			
+		}
+	
 	
 	public Document getAvatar(){
 		return null;
