@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -67,9 +68,6 @@ public class Person extends BaseEntity {
 	@XmlElement
 	private final Contact contact;
 
-	@ManyToOne
-	@JoinColumn(name = "avatarReference")
-	private Document avatar;
 
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
 	// @NotNull
@@ -79,6 +77,10 @@ public class Person extends BaseEntity {
 	// @NotNull
 	private final Set<Bid> bids;
 
+	@OneToOne
+	@PrimaryKeyJoinColumn//(name="documentIdentity")
+	private Document avatar;
+	
 	public Person() {
 
 		this.alias = "";
