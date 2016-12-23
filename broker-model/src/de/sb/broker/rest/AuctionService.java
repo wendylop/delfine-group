@@ -189,21 +189,22 @@ public class AuctionService {
 	 */
 	@GET
 	@Path("/{identity}/bid")
-	@Produces({"application/xml", "application/json"})
+	@Produces("text/plain")
 	@Bid.XmlBidderAsReferenceFilter
 	@Bid.XmlAuctionAsReferenceFilter
-	public Bid getBidForAuction(
+	public long getBidForAuction(
 			@PathParam("identity") long identity,
 			@HeaderParam("Authorization") final String authentication
 			) {
 		
-		final Person requester = LifeCycleProvider.authenticate(authentication);
-		for (Bid bid : requester.getBids()) {
+		final Person bidder = LifeCycleProvider.authenticate(authentication);
+		
+		for (Bid bid : bidder.getBids()) {
 			if (bid.getAuction().getIdentity() == identity){
-				return bid;
+				return bid.getPrice();
 			}
 		}
-		return null;
+		return -1;
 	}
 	
 	/*
@@ -214,53 +215,45 @@ public class AuctionService {
 	 */
 	@POST
 	@Path("/{identity}/bid")
-	@Consumes({"application/xml", "application/json"})
-	public void CreateUpdateOrDeleteBid(
-			@PathParam("identity") long identity,
-			@HeaderParam("Authorization") final String authentication,
-			@Valid @NotNull Bid template
-			){
-		
+	@Consumes("text/plain")
+	@Produces("text/plain")
+	public long CreateUpdateOrDeleteBid(
+		@PathParam("identity") long identity,
+		@HeaderParam("Authorization") final String authentication,
+		long price
+		//nicht die ganze bid – @Valid @NotNull Bid template
+	) {
 		final EntityManager brokerManager = LifeCycleProvider.brokerManager();
-		final Person requester = LifeCycleProvider.authenticate(authentication);
-		
-		final boolean persist = template.getIdentity() == 0;
-		
+		final Person bidder = LifeCycleProvider.authenticate(authentication);
 		Auction auction = brokerManager.find(Auction.class, identity);
 		if (auction == null) throw new NotFoundException();
-				
-		final Bid bid;
-		if(persist){
-			bid = new Bid(auction, requester);
-		} else  {
-			bid = brokerManager.find(Bid.class, template.getIdentity());
-			if (bid == null) throw new NotFoundException();
-			if (bid.getBidderReference() != requester.getIdentity()) throw new ForbiddenException();
+		
+		Bid bid = auction.getBid(bidder);
+		if (bid == null){
+			bid = new Bid(auction, bidder);
 		}
-			
-		if (!persist && template.getPrice() == 0){
-			brokerManager.remove(bid);
-		} else{
-			bid.setPrice(template.getPrice());
-			bid.setVersion(template.getVersion());
-			
-		}
-
+		//TODO wenn price == 0, dann bestehende auktion löschen
+		
+		bid.setPrice(price);
 		try {
-			if (persist) brokerManager.persist(bid);	
-			else brokerManager.flush();
-		} catch (ConstraintViolationException e) {
+			if (bid.getIdentity() == 0) {
+				brokerManager.persist(bid);
+			} else { 
+				brokerManager.flush();
+			}
+		}  catch (ConstraintViolationException e) {
 			throw new ClientErrorException(Status.BAD_REQUEST);
 		}
-
-		try {
+		
+		try { 
 			brokerManager.getTransaction().commit();
 		} catch (RollbackException e) {
 			throw new ClientErrorException(Status.CONFLICT);
-		}
-		finally {
+		}  finally {
 			brokerManager.getTransaction().begin();
 		}
+		
+		return bid.getIdentity();
 	}
 }
 

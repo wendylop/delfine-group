@@ -110,21 +110,29 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}/auctions")
-	public Set<Auction> getSomeonesAuctions(@PathParam("identity") long identity) {
+	public Response getSomeonesAuctions(@PathParam("identity") long identity) {//TODO Parameter ergänzen, zb closed
 		EntityManager em = LifeCycleProvider.brokerManager();
 
 		Person person = em.find(Person.class, identity);
 
 		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
 		auctionsArray.addAll(person.getAuctions());
+		
+		
+		//TODO über alle Gebote die auctions holen & hinzufügen
+		//Wenn alle Auktionen geschlossen, Gebote und deren Bieter zurückgeben/marshalen 
+		//auch bei getpeople und get auctions
 
+		
 		// set comparator to compare by different values in case some have the
 		// same result
 		final Comparator<Auction> comparator = Comparator.comparingLong(Auction::getClosureTimestamp)
 				.thenComparing(Auction::getCreationTimestamp).thenComparing(Auction::getIdentity);
 		auctionsArray.sort(comparator);
 
-		return new HashSet<Auction>(auctionsArray);
+		Auction[] result = auctionsArray.toArray(new Auction[0]);
+		
+		return Response.ok().entity(result).build();//TODO entity() nutzen um filter-annotationen zu übergeben
 
 	}
 

@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.persistence.annotations.CacheIndex;
+
 import com.sun.istack.internal.NotNull;
 
 @Entity
@@ -37,6 +39,7 @@ public class Person extends BaseEntity {
 	@Size(min = 1, max = 16)
 	@NotNull
 	@XmlElement
+	@CacheIndex(updateable=true) //second level cache nutzen
 	private String alias;
 
 	@Column(nullable = false, updatable = true, length = 32)

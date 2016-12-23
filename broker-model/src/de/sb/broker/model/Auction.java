@@ -136,9 +136,9 @@ public class Auction extends BaseEntity {
 		return seller;
 	}
 
-	public void setSeller(Person seller) {
+	/*public void setSeller(Person seller) {
 		this.seller = seller;
-	}
+	}*///seller nicht mehr verändern
 
 	@XmlElement
 	@XmlSellerAsReferenceFilter

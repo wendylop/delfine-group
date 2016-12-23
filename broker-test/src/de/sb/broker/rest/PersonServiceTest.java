@@ -32,10 +32,11 @@ public class PersonServiceTest extends ServiceTest{
 		
 		//this.getWasteBasket().add(person.getIdentity());
 		WebTarget webTarget = newWebTarget("test", "test").path("entities/");
-		assertEquals(200, webTarget.request().get().getStatus());
+		Response response = webTarget.request().get();
+		assertEquals(200, response.getStatus());
 		
 		webTarget = newWebTarget("test", "test").path("entities/").queryParam("alias", "passwort");
-		Response response = webTarget.request().get();
+		//Response response = webTarget.request().get();
 		List<Person> all = response.readEntity(new GenericType<List<Person>>() {});
 		assertEquals("Tester", all.get(0).getName().getFamily());
 		
