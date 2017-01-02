@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.WebApplicationException;
@@ -118,12 +119,33 @@ public class LifeCycleProvider implements ContainerRequestFilter, ContainerRespo
 		final String password = credentials.get("password");
 		if (!"basic".equals(mode) | username == null | password == null) throw new NotAuthorizedException("Basic");
 
-		// TODO: Replace with implementation of JPA authentication by calculating the password hash from the given
+		// Replace with implementation of JPA authentication by calculating the password hash from the given
 		// password, creating a query using the constant below, and returning the person if it matches the password hash.
 		// If there is none, or if it fails the password hash check, then throw NotAuthorizedException("Basic"). Note
 		// that this exception type is a specialized Subclass of ClientErrorException that is capable of storing a
 		// challenge, in this case for Basic Authorization. 
-		throw new AssertionError(PERSON_BY_ALIAS);
+		//throw new AssertionError(PERSON_BY_ALIAS);
+		
+		byte[] inputPasswordHash = Person.passwordHash(password);
+		byte[] passwordHash;
+		Person person;
+		
+		EntityManager em = LifeCycleProvider.brokerManager();
+
+		TypedQuery<Person> query = em.createQuery(PERSON_BY_ALIAS, Person.class);
+		query.setParameter("alias", username);
+		
+		person = query.getSingleResult();
+		passwordHash = person.getPasswordHash();
+		
+		if(inputPasswordHash.equals(passwordHash)) {
+			
+			return person;
+		
+		} else {
+			throw new NotAuthorizedException("Basic");
+		}
+		
 	}
 
 
