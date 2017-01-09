@@ -13,6 +13,7 @@ import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
@@ -220,21 +221,27 @@ public class AuctionService {
 	public long CreateUpdateOrDeleteBid(
 		@PathParam("identity") long identity,
 		@HeaderParam("Authorization") final String authentication,
-		long price
+		@Min(0) long price
 		//nicht die ganze bid – @Valid @NotNull Bid template
 	) {
 		final EntityManager brokerManager = LifeCycleProvider.brokerManager();
 		final Person bidder = LifeCycleProvider.authenticate(authentication);
-		Auction auction = brokerManager.find(Auction.class, identity);
+		final Auction auction = brokerManager.find(Auction.class, identity);
 		if (auction == null) throw new NotFoundException();
 		
 		Bid bid = auction.getBid(bidder);
 		if (bid == null){
+			if (price == 0) return 0;
 			bid = new Bid(auction, bidder);
-		}
-		//TODO wenn price == 0, dann bestehende auktion löschen
+		} 
 		
-		bid.setPrice(price);
+		//wenn price == 0, dann bestehende auktion löschen
+		if (price == 0){
+			brokerManager.remove(bid);
+		}  else {
+			bid.setPrice(price);
+		}
+		
 		try {
 			if (bid.getIdentity() == 0) {
 				brokerManager.persist(bid);

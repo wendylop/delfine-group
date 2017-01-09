@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -134,17 +135,17 @@ public class LifeCycleProvider implements ContainerRequestFilter, ContainerRespo
 
 		TypedQuery<Person> query = em.createQuery(PERSON_BY_ALIAS, Person.class);
 		query.setParameter("alias", username);
-		
-		person = query.getSingleResult();
-		passwordHash = person.getPasswordHash();
-		
-		if(inputPasswordHash.equals(passwordHash)) {
-			
-			return person;
-		
-		} else {
+		try{
+			person = query.getSingleResult();
+		} catch(NoResultException e) {
 			throw new NotAuthorizedException("Basic");
 		}
+		passwordHash = person.getPasswordHash();
+		
+		if(!inputPasswordHash.equals(passwordHash)) {
+			throw new NotAuthorizedException("Basic");
+		}
+		return person;
 		
 	}
 

@@ -51,8 +51,10 @@ public class PersonService {
 			@QueryParam("name") Name name, @QueryParam("address") Address address,
 			@QueryParam("contact") Contact contact, @QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults, @QueryParam("minCreationTimestamp") long minCreationTimestamp,
-			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp) {
+			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,
+			@HeaderParam("Authorization") String authentication) {
 		EntityManager em = LifeCycleProvider.brokerManager();
+		LifeCycleProvider.authenticate(authentication);
 
 		TypedQuery<Long> query = em.createQuery(
 				"select p.identity from Person as p where" + "(:alias is null or p.alias = :alias) and"
