@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 @Entity
-@Table(name="Document", schema="brokerDB")
+@Table(name="Document", schema="broker")
 @PrimaryKeyJoinColumn(name="documentIdentity")
 @XmlRootElement
 @XmlType
@@ -24,7 +24,7 @@ public class Document extends BaseEntity {
 	    @Column(nullable=false, updatable=true)
 		@NotNull
 		@XmlElement
-	    private String type;	
+	    private String contentType;	
 		
 		@Column(updatable=false, nullable=false, insertable=true)
 		@NotNull
@@ -33,22 +33,22 @@ public class Document extends BaseEntity {
 		@Column (updatable=false, nullable=false, insertable=true)
 		@NotNull
 		@Size(min=32, max=32)
-	    private byte[] hash;
+	    private byte[] contentHash;
 		
 		public Document() {}
 		
 		public Document(byte[] content){
 			this.content = content;
-			this.hash = contentHash(content);
+			this.contentHash = contentHash(content);
 		}
 	    
 		
 	    public String getType() {
-	        return type;
+	        return contentType;
 	    }
 	    
 	    public void setType(String type) {
-	    	this.type = type;
+	    	this.contentType = type;
 	    }
 	    
 	    public byte[] getContent() {
@@ -56,7 +56,7 @@ public class Document extends BaseEntity {
 		}
 
 	    public byte[] getHash() {
-	        return hash;
+	        return contentHash;
 	    }
 	    
 		public static byte[] contentHash(byte[] content){

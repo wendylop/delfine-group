@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -22,6 +23,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.persistence.annotations.CacheIndex;
 
 import com.sun.istack.internal.NotNull;
 
@@ -36,6 +39,7 @@ public class Person extends BaseEntity {
 	@Size(min = 1, max = 16)
 	@NotNull
 	@XmlElement
+	@CacheIndex(updateable=true) //second level cache nutzen
 	private String alias;
 
 	@Column(nullable = false, updatable = true, length = 32)
@@ -67,9 +71,6 @@ public class Person extends BaseEntity {
 	@XmlElement
 	private final Contact contact;
 
-	@ManyToOne
-	@JoinColumn(name = "avatarReference")
-	private Document avatar;
 
 	@OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
 	// @NotNull
@@ -79,6 +80,10 @@ public class Person extends BaseEntity {
 	// @NotNull
 	private final Set<Bid> bids;
 
+	@OneToOne
+	@PrimaryKeyJoinColumn//(name="documentIdentity")
+	private Document avatar;
+	
 	public Person() {
 
 		this.alias = "";
