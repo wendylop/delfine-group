@@ -5,6 +5,7 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -142,7 +143,7 @@ public class LifeCycleProvider implements ContainerRequestFilter, ContainerRespo
 		}
 		passwordHash = person.getPasswordHash();
 		
-		if(!inputPasswordHash.equals(passwordHash)) {
+		if(!Arrays.equals(inputPasswordHash, passwordHash)) {
 			throw new NotAuthorizedException("Basic");
 		}
 		return person;

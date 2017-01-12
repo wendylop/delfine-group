@@ -51,15 +51,10 @@ public class PersonService {
 			@QueryParam("name") Name name, @QueryParam("address") Address address,
 			@QueryParam("contact") Contact contact, @QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults, @QueryParam("minCreationTimestamp") long minCreationTimestamp,
-<<<<<<< HEAD
-			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp) {
-		EntityManager em = LifeCycleProvider.brokerManager();
-=======
 			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,
 			@HeaderParam("Authorization") String authentication) {
 		EntityManager em = LifeCycleProvider.brokerManager();
 		LifeCycleProvider.authenticate(authentication);
->>>>>>> 26bc92d376990f96d91e3c8185a6d13347c0492d
 
 		TypedQuery<Long> query = em.createQuery(
 				"select p.identity from Person as p where" + "(:alias is null or p.alias = :alias) and"
@@ -103,8 +98,10 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}")
-	public Person getPerson(@PathParam("identity") long identity) {
+	public Person getPerson(@HeaderParam("Authorization") final String authentication,
+							@PathParam("identity") long identity) {
 		EntityManager em = LifeCycleProvider.brokerManager();
+		final Person requester = LifeCycleProvider.authenticate(authentication);
 
 		Person person = em.find(Person.class, identity);
 
@@ -125,12 +122,9 @@ public class PersonService {
 		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
 		auctionsArray.addAll(person.getAuctions());
 		
-		
 		//TODO über alle Gebote die auctions holen & hinzufügen
 		//Wenn alle Auktionen geschlossen, Gebote und deren Bieter zurückgeben/marshalen 
 		//auch bei getpeople und get auctions
-
-<<<<<<< HEAD
 		
 		// set comparator to compare by different values in case some have the
 		// same result
@@ -140,17 +134,6 @@ public class PersonService {
 
 		Auction[] result = auctionsArray.toArray(new Auction[0]);
 		
-=======
-		
-		// set comparator to compare by different values in case some have the
-		// same result
-		final Comparator<Auction> comparator = Comparator.comparingLong(Auction::getClosureTimestamp)
-				.thenComparing(Auction::getCreationTimestamp).thenComparing(Auction::getIdentity);
-		auctionsArray.sort(comparator);
-
-		Auction[] result = auctionsArray.toArray(new Auction[0]);
-		
->>>>>>> 26bc92d376990f96d91e3c8185a6d13347c0492d
 		return Response.ok().entity(result).build();//TODO entity() nutzen um filter-annotationen zu übergeben
 
 	}
@@ -323,8 +306,4 @@ public class PersonService {
 	// beide mit @consume bzw. @produces mit wildcard(schaltet marshaling aus)
 	// argument: mimetype/contenttype mit @headerparam("Content-type")
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 26bc92d376990f96d91e3c8185a6d13347c0492d

@@ -1,3 +1,5 @@
+.classpath
+.project
 .metadata/
 broker-model/bin/
 broker-test/bin/
