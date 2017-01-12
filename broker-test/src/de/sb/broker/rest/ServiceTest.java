@@ -7,12 +7,8 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import org.glassfish.jersey.client.ClientConfig;
@@ -37,7 +33,7 @@ import de.sb.broker.model.Person;
  * container can alternatively be started as a separate application.
  */
 public class ServiceTest {
-	static private final URI SERVICE_URI = URI.create("http://localhost:8001/services");
+    static final URI SERVICE_URI = URI.create("http://localhost:8001/services");
 	static private HttpServer HTTP_CONTAINER = null;
 
 	private final Set<Long> wasteBasket = new HashSet<>();
@@ -90,22 +86,22 @@ public class ServiceTest {
 		return ClientBuilder.newClient(configuration).target(SERVICE_URI);
 	}
 
-	protected Person createPersonEntity(){
-		Person person = new Person();
-		person.setAlias("Test");
-		person.getName().setFamily("Tester");
-		person.getName().setGiven("Test");
-		person.getAddress().setStreet("TestStreet 1");
-		person.getAddress().setCity("TestCity");
-		person.getAddress().setPostCode("12345");
-		person.getContact().setEmail("test@tester.com");
-		person.getContact().setPhone("012345678901");
-		//person.setpasswordHash("Test");
-		return person;
-	}
-	
 
+	/**
+	 * Creates an embedded REST service container. This operation is run once before any of the test
+	 * methods in it's class are run.
+	 */
 	@BeforeClass
+	static public void startEmbeddedHttpContainer () {
+		final ResourceConfig configuration = new ResourceConfig()
+			.packages(ServiceTest.class.getPackage().toString())
+			.register(MoxyJsonFeature.class)	// edit "network.http.accept.default" in Firefox's "about:config"
+			.register(MoxyXmlFeature.class)		// to make "application/json" preferable to "application/xml"
+			.register(EntityFilteringFeature.class);
+
+		HTTP_CONTAINER = JdkHttpServerFactory.createHttpServer(SERVICE_URI, configuration);
+		Logger.getGlobal().log(INFO, "Embedded HTTP container running on service address {0}.", SERVICE_URI);
+	}
 
 
 	/**
@@ -136,4 +132,5 @@ public class ServiceTest {
 			stopEmbeddedHttpContainer();
 		}
 	}
+
 }

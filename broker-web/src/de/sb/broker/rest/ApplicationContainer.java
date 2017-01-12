@@ -35,7 +35,7 @@ public class ApplicationContainer {
 	 *             if there is an I/O related problem
 	 */
 	static public void main(final String[] args) throws NumberFormatException, IOException {
-		final int servicePort = args.length == 0 ? 80 : Integer.parseInt(args[0]);
+		final int servicePort = args.length == 0 ? 8001 : Integer.parseInt(args[0]);
 		final URI serviceURI;
 		try {
 			serviceURI = new URI("http", null, InetAddress.getLocalHost().getCanonicalHostName(), servicePort,
