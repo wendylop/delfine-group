@@ -48,7 +48,8 @@ public class PersonService {
 	 */
 	@GET
 	public List<Person> getPeople(@QueryParam("alias") String alias, @QueryParam("group") Group group,
-			@QueryParam("name") Name name, @QueryParam("address") Address address,
+			//@QueryParam("given") String given, 
+			@QueryParam("address") Address address,
 			@QueryParam("contact") Contact contact, @QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults, @QueryParam("minCreationTimestamp") long minCreationTimestamp,
 			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,
@@ -58,7 +59,8 @@ public class PersonService {
 
 		TypedQuery<Long> query = em.createQuery(
 				"select p.identity from Person as p where" + "(:alias is null or p.alias = :alias) and"
-						+ "(:group is null or p.group = :group) and" + "(:name is null or p.name = :name) and"
+						+ "(:group is null or p.group = :group) and" 
+						//+ "(:name is null or p.name = :name) and"
 						+ "(:address is null or p.address = :address) and"
 						+ "(:contact is null or p.contact = :contact) and"
 						+ "(:maxCreationTimestamp is null or p.creationTimestamp <= :maxCreationTimestamp) and"
@@ -67,7 +69,7 @@ public class PersonService {
 
 		query.setParameter("alias", alias);
 		query.setParameter("group", group);
-		query.setParameter("name", name);
+		//query.setParameter("name", name);
 		query.setParameter("address", address);
 		query.setParameter("contact", contact);
 		query.setParameter("minCreationTimestamp", minCreationTimestamp);
@@ -244,7 +246,7 @@ public class PersonService {
 		person.getAddress().setStreet(template.getAddress().getStreet());
 		person.getContact().setEmail(template.getContact().getEmail());
 		person.getContact().setPhone(template.getContact().getPhone());
-		person.setPasswordHash(password.getBytes());
+		person.setPasswordHash(Person.passwordHash(password));
 		person.setVersion(template.getVersion());
 
 		try {

@@ -6,7 +6,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.persistence.oxm.MediaType;
 import org.junit.Ignore;
 import org.junit.Test;
 import de.sb.broker.model.Person;
@@ -15,24 +14,7 @@ public class PersonServiceTest extends ServiceTest{
 
 	@Test
 	public void testCriteriaQueries() {
-/*
-
-		//1. given
-		
-		
-		//this.getWasteBasket().add(person.getIdentity());
-		WebTarget webTarget = newWebTarget("test", "test").path("entities/");
-		Response response = webTarget.request().get();
-		assertEquals(200, response.getStatus());
-		
-		webTarget = newWebTarget("test", "test").path("entities/").queryParam("alias", "passwort");
-		//Response response = webTarget.request().get();
-		List<Person> all = response.readEntity(new GenericType<List<Person>>() {});
-		assertEquals("Tester", all.get(0).getName().getFamily());
-
-		//... aufrufen von GET /people ; GET /auctions
-*/
-		
+		//web target parameter 
 		
 	}
 	
@@ -55,7 +37,7 @@ public class PersonServiceTest extends ServiceTest{
 		assertEquals("10999", person.getAddress().getPostCode());
 		assertEquals("ines.bergmann@web.de", person.getContact().getEmail());
 		assertEquals("0172/2345678", person.getContact().getPhone());
-				
+		
 		// test for invalid authentication 
 		//non-existent user
 		WebTarget nonExistentWebTarget = newWebTarget("test", "test").path("people/1");
@@ -63,13 +45,10 @@ public class PersonServiceTest extends ServiceTest{
 		//invalid password for existing user
 		WebTarget invalidPaswordWebTarget = newWebTarget("ines", "test").path("people/1");
 		assertEquals(401, invalidPaswordWebTarget.request().get().getStatus());
-
-		
+	
 	}
 		
 
-
-	
 	@Test
 	public void testRequester() {
 		String requesterAlias = "ines";
@@ -83,9 +62,8 @@ public class PersonServiceTest extends ServiceTest{
 	}
 
 	@Test
-	@Ignore //TODO
 	public void testLifeCycle() {
-		PersonService p = new PersonService();
+		//PersonService p = new PersonService();
 		Person p1 = new Person();
 		p1.getName().setGiven("Paul");
 		p1.getName().setFamily("Test");
@@ -94,16 +72,24 @@ public class PersonServiceTest extends ServiceTest{
 		p1.getAddress().setPostCode("10249");
 		p1.getContact().setEmail("paul@web.de");
 		p1.getContact().setPhone("12345");
+		p1.setAlias("paul");
+		//p1.setPasswordHash(Person.passwordHash("test"));
 		
 		//p.createOrUpdatePerson(p1, "paul", "test");
 		
-		
-		WebTarget adminWebTarget = newWebTarget("ines","ines").path("people/3");
-		Response response = adminWebTarget.request().put(Entity.xml(p1));
+		WebTarget webTarget = newWebTarget("ines","ines").path("people");
+		Response putResponse = webTarget.request().header("Password", "test").put(Entity.xml(p1));
 		//test http status
-		assertEquals(200, response.getStatus());
-		//test name is correct
-		Person person = response.readEntity(Person.class);
+		assertEquals(200, putResponse.getStatus());
+		
+		Long id = putResponse.readEntity(Long.class);
+		getWasteBasket().add(id);
+
+		webTarget = newWebTarget("ines","ines").path("people/"+id);
+		Response getResponse = webTarget.request().get();
+		assertEquals(200, getResponse.getStatus());
+		
+		Person person = getResponse.readEntity(Person.class);
 		assertEquals("Paul", person.getName().getGiven());
 		assertEquals("Test", person.getName().getFamily());
 		//test address and contact 
@@ -113,14 +99,15 @@ public class PersonServiceTest extends ServiceTest{
 		assertEquals("paul@web.de", person.getContact().getEmail());
 		assertEquals("12345", person.getContact().getPhone());
 		
-		EntityService es = new EntityService();
-		es.deleteEntity("paul", p1.getIdentity());
+		
+		//EntityService es = new EntityService();
+		//es.deleteEntity("paul", p1.getIdentity());
 		
 		//test existing person in database
-		WebTarget validUserWebTarget2 = newWebTarget("paul","test").path("people/3");
-		Response response2 = validUserWebTarget2.request().get();
+		//WebTarget validUserWebTarget2 = newWebTarget("ines","ines").path("people/3");
+		//Response response2 = validUserWebTarget2.request().get();
 		//test http status
-		assertEquals(401, response2.getStatus());
+		//assertEquals(401, response2.getStatus());
 		
 	}
 	
