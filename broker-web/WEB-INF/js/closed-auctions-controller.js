@@ -35,6 +35,13 @@ this.de.sb.broker = this.de.sb.broker || {};
 		SUPER.prototype.display.call(this);
 
 		var sectionElement = document.querySelector("#closed-seller-auctions-template").content.cloneNode(true).firstElementChild;
+		
+		de.sb.util.AJAX.invoke("/services/auctions", "GET", { "Accept" : "application/json" }, null, null, function() {
+ 		
+ 			alert('xxx');
+ 		});
+ 
+ 
 		document.querySelector("main").appendChild(sectionElement);
 		sectionElement = document.querySelector("#closed-bidder-auctions-template").content.cloneNode(true).firstElementChild;
 		document.querySelector("main").appendChild(sectionElement);
@@ -67,6 +74,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 			self.displayStatus(statusAccumulator.status, statusAccumulator.statusText);
 		});
 	}
+
 
 
 	/**

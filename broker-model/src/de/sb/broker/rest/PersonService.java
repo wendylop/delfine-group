@@ -127,6 +127,7 @@ public class PersonService {
 		//TODO über alle Gebote die auctions holen & hinzufügen
 		//Wenn alle Auktionen geschlossen, Gebote und deren Bieter zurückgeben/marshalen 
 		//auch bei getpeople und get auctions
+
 		
 		// set comparator to compare by different values in case some have the
 		// same result
@@ -309,3 +310,4 @@ public class PersonService {
 	// argument: mimetype/contenttype mit @headerparam("Content-type")
 
 }
+

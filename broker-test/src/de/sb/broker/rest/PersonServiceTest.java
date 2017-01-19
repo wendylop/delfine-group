@@ -114,7 +114,8 @@ public class PersonServiceTest extends ServiceTest{
 	
 	@Test
 	public void testBidRelationQueries() {
-
+		
+	
 	}	
 
 }
