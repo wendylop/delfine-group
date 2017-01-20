@@ -55,9 +55,10 @@ public class AuctionService {
 			@QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults,
 			@QueryParam("minCreationTimestamp") long minCreationTimestamp,
-			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp//TODO
+			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,//TODO
+			@HeaderParam("Authorization") final String authentication
 			){
-		
+		LifeCycleProvider.authenticate(authentication);
 		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		TypedQuery<Long> qa = em.createQuery("select a.identity from Auction as a where"
@@ -118,7 +119,6 @@ public class AuctionService {
 			@Valid Auction template,
 			@HeaderParam("Authorization") final String authentication
 			){
-		
 		EntityManager em = LifeCycleProvider.brokerManager();
 		final Person requester = LifeCycleProvider.authenticate(authentication);
 		final boolean persist = template.getIdentity() == 0;
@@ -175,8 +175,8 @@ public class AuctionService {
 	 */
 	@GET
 	@Path("/{identity}")
-	public Auction getAuction(@PathParam("identity") Long identity){
-		
+	public Auction getAuction(@PathParam("identity") Long identity, @HeaderParam("Authorization") final String authentication){
+		LifeCycleProvider.authenticate(authentication);
 		EntityManager em = LifeCycleProvider.brokerManager();
 		
 		Auction auction = em.find(Auction.class, identity);

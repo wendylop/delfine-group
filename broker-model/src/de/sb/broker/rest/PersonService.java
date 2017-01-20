@@ -116,8 +116,12 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}/auctions")
-	public Response getSomeonesAuctions(@PathParam("identity") long identity) {//TODO Parameter ergänzen, zb closed
+	public Response getSomeonesAuctions(
+			@PathParam("identity") long identity, 
+			@HeaderParam("Authorization") final String authentication
+			) {//TODO Parameter ergänzen, zb closed
 		EntityManager em = LifeCycleProvider.brokerManager();
+		LifeCycleProvider.authenticate(authentication);
 
 		Person person = em.find(Person.class, identity);
 
@@ -147,8 +151,12 @@ public class PersonService {
 	 */
 	@GET
 	@Path("/{identity}/bids")
-	public ArrayList<Bid> getSomeonesBids(@PathParam("identity") long identity) {
+	public ArrayList<Bid> getSomeonesBids(
+			@PathParam("identity") long identity, 
+			@HeaderParam("Authorization") final String authentication
+			) {
 		EntityManager em = LifeCycleProvider.brokerManager();
+		LifeCycleProvider.authenticate(authentication);
 
 		Person person = em.find(Person.class, identity);
 		// define getter
@@ -270,7 +278,7 @@ public class PersonService {
 		return person.getIdentity();
 	}
 
-	// TODO GET /services/people/4711/avatar : avatar als dokument zurück
+	// GET /services/people/4711/avatar : avatar als dokument zurück
 	// liefern
 	// byte[] und mimetype/contenttype
 	// return responsebuilder.ok(content, contenttype).build();
@@ -301,13 +309,27 @@ public class PersonService {
 		}
 	}
 
-	public Document getAvatar() {
-		return null;
-	}
 
-	// TODO PUT /services/people/4711/avatar : dokument hochladen (img)
+	// PUT /services/people/4711/avatar : dokument hochladen (img)
 	// beide mit @consume bzw. @produces mit wildcard(schaltet marshaling aus)
 	// argument: mimetype/contenttype mit @headerparam("Content-type")
+	@PUT
+	@Path("{identity}/avatar")
+	@Consumes({ "application/xml", "application/json" })
+//	@Produces({ "wildcard" })
+	public void setAvatar(@HeaderParam("Authorization") final String authentication,
+			@PathParam("identity") final long id, byte[] content, @QueryParam("x") int x, @QueryParam("y") int y) {
+		LifeCycleProvider.authenticate(authentication);
+
+		EntityManager em = LifeCycleProvider.brokerManager();
+
+		Person person = em.find(Person.class, id);
+		
+		//TODO
+		//person.setAvatar(avatar);
+		//resize mit X und Y int
+	}
+
 
 }
 
