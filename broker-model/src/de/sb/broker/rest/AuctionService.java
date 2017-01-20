@@ -68,8 +68,8 @@ public class AuctionService {
 				+ "(:maxAP is null or a.askingPrice <= :maxAP) and"
 				+ "(:maxClosureTimestamp is null or a.closureTimestamp <= :maxClosureTimestamp) and"
 				+ "(:minClosureTimestamp is null or a.closureTimestamp <= :minClosureTimestamp) and"
-				+ "(:maxCreationTimestamp is null or p.creationTimestamp <= :maxCreationTimestamp) and"
-				+ "(:minCreationTimestamp is null or p.creationTimestamp <= :minCreationTimestamp) and"
+				+ "(:maxCreationTimestamp is null or a.creationTimestamp <= :maxCreationTimestamp) and"
+				+ "(:minCreationTimestamp is null or a.creationTimestamp <= :minCreationTimestamp) and"
 				+ "(:description is null or a.description = :description)", 
 				Long.class);
 		

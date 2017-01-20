@@ -60,7 +60,7 @@ public class PersonService {
 		TypedQuery<Long> query = em.createQuery(
 				"select p.identity from Person as p where" + "(:alias is null or p.alias = :alias) and"
 						+ "(:group is null or p.group = :group) and" 
-						//+ "(:name is null or p.name = :name) and"
+						+ "(:name is null or p.name = :name) and"
 						+ "(:address is null or p.address = :address) and"
 						+ "(:contact is null or p.contact = :contact) and"
 						+ "(:maxCreationTimestamp is null or p.creationTimestamp <= :maxCreationTimestamp) and"

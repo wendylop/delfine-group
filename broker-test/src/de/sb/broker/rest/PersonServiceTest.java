@@ -63,7 +63,6 @@ public class PersonServiceTest extends ServiceTest{
 
 	@Test
 	public void testLifeCycle() {
-		//PersonService p = new PersonService();
 		Person p1 = new Person();
 		p1.getName().setGiven("Paul");
 		p1.getName().setFamily("Test");
@@ -73,9 +72,6 @@ public class PersonServiceTest extends ServiceTest{
 		p1.getContact().setEmail("paul@web.de");
 		p1.getContact().setPhone("12345");
 		p1.setAlias("paul");
-		//p1.setPasswordHash(Person.passwordHash("test"));
-		
-		//p.createOrUpdatePerson(p1, "paul", "test");
 		
 		WebTarget webTarget = newWebTarget("ines","ines").path("people");
 		Response putResponse = webTarget.request().header("Password", "test").put(Entity.xml(p1));
@@ -92,7 +88,6 @@ public class PersonServiceTest extends ServiceTest{
 		Person person = getResponse.readEntity(Person.class);
 		assertEquals("Paul", person.getName().getGiven());
 		assertEquals("Test", person.getName().getFamily());
-		//test address and contact 
 		assertEquals("Berlin", person.getAddress().getCity());
 		assertEquals("Blumenstrasse", person.getAddress().getStreet());
 		assertEquals("10249", person.getAddress().getPostCode());
