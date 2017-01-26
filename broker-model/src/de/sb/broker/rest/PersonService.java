@@ -1,5 +1,6 @@
 package de.sb.broker.rest;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -118,21 +119,30 @@ public class PersonService {
 	@Path("/{identity}/auctions")
 	public Response getSomeonesAuctions(
 			@PathParam("identity") long identity, 
-			@HeaderParam("Authorization") final String authentication
+			@HeaderParam("Authorization") final String authentication,
+			@QueryParam("seller") final boolean seller,
+			@QueryParam("closed") final boolean closed
 			) {//TODO Parameter ergänzen, zb closed
 		EntityManager em = LifeCycleProvider.brokerManager();
 		LifeCycleProvider.authenticate(authentication);
 
 		Person person = em.find(Person.class, identity);
 
-		ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
-		auctionsArray.addAll(person.getAuctions());
+		// ArrayList<Auction> auctionsArray = new ArrayList<Auction>();
+		// auctionsArray.addAll(person.getAuctions());
 		
 		//TODO über alle Gebote die auctions holen & hinzufügen
 		//Wenn alle Auktionen geschlossen, Gebote und deren Bieter zurückgeben/marshalen 
 		//auch bei getpeople und get auctions
-
 		
+		List<Auction> auctionsArray = person.getBids()
+				.stream()
+				.map(Bid::getAuction)
+				.collect(Collectors.toList());
+		
+		auctionsArray.addAll(person.getAuctions());
+		
+
 		// set comparator to compare by different values in case some have the
 		// same result
 		final Comparator<Auction> comparator = Comparator.comparingLong(Auction::getClosureTimestamp)
@@ -141,7 +151,14 @@ public class PersonService {
 
 		Auction[] result = auctionsArray.toArray(new Auction[0]);
 		
-		return Response.ok().entity(result).build();//TODO entity() nutzen um filter-annotationen zu übergeben
+		
+		List<Annotation> filterAnnotations = Arrays.asList(
+				new Auction.XmlSellerAsEntityFilter.Literal(),
+				new Auction.XmlBidsAsEntityFilter.Literal(),
+				new Bid.XmlBidderAsEntityFilter.Literal(),
+				new Bid.XmlAuctionAsReferenceFilter.Literal()
+				);
+		return Response.ok().entity(result, filterAnnotations.toArray(new Annotation[0])).build();//TODO entity() nutzen um filter-annotationen zu übergeben
 
 	}
 
@@ -326,7 +343,6 @@ public class PersonService {
 		Person person = em.find(Person.class, id);
 		
 		//TODO
-		//person.setAvatar(avatar);
 		//resize mit X und Y int
 	}
 

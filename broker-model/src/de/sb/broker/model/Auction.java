@@ -80,7 +80,7 @@ public class Auction extends BaseEntity {
 		this.unitCount = 0;
 		this.askingPrice = 0;
 		this.closureTimestamp = System.currentTimeMillis() + (30 * 24 * 60 * 60 * 1000);
-		;// +30*24*60*60*1000 oder Duration
+		// +30*24*60*60*1000 oder Duration
 		this.description = "";
 		this.seller = seller;
 		bids = new HashSet<Bid>();

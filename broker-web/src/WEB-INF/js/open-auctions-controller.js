@@ -36,16 +36,16 @@ this.de.sb.broker = this.de.sb.broker || {};
 		if (!this.sessionContext.user) return;
 		SUPER.prototype.display.call(this);
 
-		var sectionElement = document.querySelector("#open-seller-auctions-template").content.cloneNode(true).firstElementChild;
+		var sectionElement = document.querySelector("#open-auctions-template").content.cloneNode(true).firstElementChild;
 		document.querySelector("main").appendChild(sectionElement);
-		sectionElement = document.querySelector("#open-bidder-auctions-template").content.cloneNode(true).firstElementChild;
-		document.querySelector("main").appendChild(sectionElement);
+		//sectionElement = document.querySelector("#open-auctions-template").content.cloneNode(true).firstElementChild;
+		//document.querySelector("main").appendChild(sectionElement);
 
 		var indebtedSemaphore = new de.sb.util.Semaphore(1 - 2);
 		var statusAccumulator = new de.sb.util.StatusAccumulator();
 		var self = this;
 
-		var resource = "/services/people/" + this.sessionContext.user.identity + "/auctions?seller=true&open=true";
+		/*var resource = "/services/people/" + this.sessionContext.user.identity + "/auctions?seller=true&open=true";
 		de.sb.util.AJAX.invoke(resource, "GET", {"Accept": "application/json"}, null, this.sessionContext, function (request) {
 			if (request.status === 200) {
 				var auctions = JSON.parse(request.responseText);
@@ -53,7 +53,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 			}
 			statusAccumulator.offer(request.status, request.statusText);
 			indebtedSemaphore.release();
-		});
+		});*/
 
 		var resource = "/services/people/" + this.sessionContext.user.identity + "/auctions?seller=false&open=true";
 		de.sb.util.AJAX.invoke(resource, "GET", {"Accept": "application/json"}, null, this.sessionContext, function (request) {
@@ -75,7 +75,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 	 * Displays the given auctions that feature the requester as seller.
 	 * @param auctions {Array} the seller auctions
 	 */
-	de.sb.broker.OpenAuctionsController.prototype.displaySellerAuctions = function (auctions) {
+	/*de.sb.broker.OpenAuctionsController.prototype.displaySellerAuctions = function (auctions) {
 		var tableBodyElement = document.querySelector("section.open-seller-auctions tbody");
 		var rowTemplate = document.createElement("tr");
 		for (var index = 0; index < 7; ++index) {
@@ -89,21 +89,21 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var rowElement = rowTemplate.cloneNode(true);
 			tableBodyElement.appendChild(rowElement);
 
-			var maxBid = selectBidByMaximumPrice(auction.bids);
+			//var maxBid = selectBidByMaximumPrice(auction.bids);
 			var activeElements = rowElement.querySelectorAll("output");
-			if (maxBid) {
-				activeElements[0].value = maxBid.bidder.alias;
-				activeElements[0].title = createDisplayTitle(maxBid.bidder);
-			}
+			//if (maxBid) {
+			//	activeElements[0].value = maxBid.bidder.alias;
+			//	activeElements[0].title = createDisplayTitle(maxBid.bidder);
+			//}
 			activeElements[1].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
 			activeElements[2].value = new Date(auction.closureTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
 			activeElements[3].title = auction.description;
 			activeElements[3].value = auction.title;
 			activeElements[4].value = auction.unitCount;
 			activeElements[5].value = (auction.askingPrice * 0.01).toFixed(2);
-			if (maxBid) activeElements[6].value = (maxBid.price * 0.01).toFixed(2);
+			//if (maxBid) activeElements[6].value = (maxBid.price * 0.01).toFixed(2);
 		});
-	}
+	}*/
 
 
 	/**
@@ -111,7 +111,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 	 * @param auctions {Array} the bidder auctions
 	 */
 	de.sb.broker.OpenAuctionsController.prototype.displayBidderAuctions = function (auctions) {
-		var tableBodyElement = document.querySelector("section.open-bidder-auctions tbody");
+		var tableBodyElement = document.querySelector("section.open-auctions tbody");
 		var rowTemplate = document.createElement("tr");
 		for (var index = 0; index < 9; ++index) {
 			var cellElement = document.createElement("td");
@@ -124,21 +124,21 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var rowElement = rowTemplate.cloneNode(true);
 			tableBodyElement.appendChild(rowElement);
 
-			var maxBid = selectBidByMaximumPrice(auction.bids);
+			//var maxBid = selectBidByMaximumPrice(auction.bids);
 			var userBid = selectBidByBidder(auction.bids, self.sessionContext.user.identity);
 			var activeElements = rowElement.querySelectorAll("output");
 			activeElements[0].value = auction.seller.alias;
 			activeElements[0].title = createDisplayTitle(auction.seller);
-			activeElements[1].value = maxBid.bidder.alias;
-			activeElements[1].title = createDisplayTitle(maxBid.bidder);
-			activeElements[2].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
-			activeElements[3].value = new Date(auction.closureTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
-			activeElements[4].value = auction.title;
-			activeElements[4].title = auction.description;
-			activeElements[5].value = auction.unitCount;
-			activeElements[6].value = (auction.askingPrice * 0.01).toFixed(2);
-			activeElements[7].value = (userBid.price * 0.01).toFixed(2);
-			activeElements[8].value = (maxBid.price * 0.01).toFixed(2);
+			//activeElements[1].value = maxBid.bidder.alias;
+			//activeElements[1].title = createDisplayTitle(maxBid.bidder);
+			activeElements[1].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
+			activeElements[2].value = new Date(auction.closureTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
+			activeElements[3].value = auction.title;
+			activeElements[3].title = auction.description;
+			activeElements[4].value = auction.unitCount;
+			activeElements[5].value = (auction.askingPrice * 0.01).toFixed(2);
+			//activeElements[7].value = (userBid.price * 0.01).toFixed(2);
+			//activeElements[8].value = (maxBid.price * 0.01).toFixed(2);
 		});
 	}
 
@@ -148,13 +148,13 @@ this.de.sb.broker = this.de.sb.broker || {};
 	 * @param bids {Array} the bids
 	 * @return the maximum bid, or null for none
 	 */
-	function selectBidByMaximumPrice (bids) {
+	/*function selectBidByMaximumPrice (bids) {
 		var maxBid = null;
 		bids.forEach(function (bid) {
 			if (!maxBid || bid.price > maxBid.price) maxBid = bid;
 		});
 		return maxBid;
-	}
+	}*/
 
 
 	/**

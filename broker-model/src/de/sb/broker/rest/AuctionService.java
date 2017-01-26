@@ -55,7 +55,7 @@ public class AuctionService {
 			@QueryParam("firstResult") int firstResult,
 			@QueryParam("maxResults") int maxResults,
 			@QueryParam("minCreationTimestamp") long minCreationTimestamp,
-			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,//TODO
+			@QueryParam("maxCreationTimestamp") long maxCreationTimestamp,
 			@HeaderParam("Authorization") final String authentication
 			){
 		LifeCycleProvider.authenticate(authentication);
