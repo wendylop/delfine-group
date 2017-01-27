@@ -324,7 +324,18 @@ public class PersonService {
 		} else {
 
 			System.out.println("elses hallo");
-			return Response.ok(document.getContent(), document.getType()).build();
+			
+			if(x == null || y == null){
+				return Response.ok(document.getContent(), document.getType()).build();
+			}
+			
+			/*
+			 * TODO
+			 * resize auf x und y
+			 * 
+			 * und dann return
+			 */
+			return null;
 		}
 	}
 
