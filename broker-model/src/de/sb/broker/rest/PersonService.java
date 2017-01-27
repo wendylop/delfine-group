@@ -16,6 +16,7 @@ import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
@@ -29,6 +30,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -244,7 +246,7 @@ public class PersonService {
 	 * forbidden to alter other people, and to set their own group to ADMIN.
 	 */
 	@PUT
-	@Consumes({ "application/xml", "application/json" })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Long createOrUpdatePerson(@Valid @NotNull Person template,
 			@HeaderParam("Authorization") final String authentication, @HeaderParam("Password") final String password) {
 
@@ -302,9 +304,9 @@ public class PersonService {
 
 	@GET
 	@Path("{identity}/avatar")
-//	@Produces({ "wildcard" })
+	@Produces(MediaType.WILDCARD)
 	public Response getAvatar(@HeaderParam("Authorization") final String authentication,
-			@PathParam("identity") final long id) {
+			@PathParam("identity") final long id, @Min(1) @QueryParam("x") Integer x, @Min(1) @QueryParam("y") Integer y) {
 
 		System.out.println("weder noch hallo");
 		
@@ -332,18 +334,32 @@ public class PersonService {
 	// argument: mimetype/contenttype mit @headerparam("Content-type")
 	@PUT
 	@Path("{identity}/avatar")
-	@Consumes({ "application/xml", "application/json" })
-//	@Produces({ "wildcard" })
+	@Consumes(MediaType.WILDCARD)
 	public void setAvatar(@HeaderParam("Authorization") final String authentication,
-			@PathParam("identity") final long id, byte[] content, @QueryParam("x") int x, @QueryParam("y") int y) {
+			@PathParam("identity") final long id, byte[] content, @QueryParam("Content-type") String contentType ) {
 		LifeCycleProvider.authenticate(authentication);
 
 		EntityManager em = LifeCycleProvider.brokerManager();
 
 		Person person = em.find(Person.class, id);
 		
-		//TODO
-		//resize mit X und Y int
+		
+		/*TODO
+		 * sha256 hash für content 
+		 * query mit dem hash 
+		 * select document.identity from Document as document where document.contentHash = :contentHash
+		 * 
+		 * wenn vorhanden, dann 
+		 * person.setAvatar(document) //em. find....
+		 * 
+		 * wenn nicht, dann
+		 * document erzeugen
+		 * final Document document = new Document(content);
+		 * document.setContentType(contentType);
+		 * 
+		 * em.persist(document);
+		 * em.getTransaction().commit.... +finally{ begin ...;
+		 */
 	}
 
 

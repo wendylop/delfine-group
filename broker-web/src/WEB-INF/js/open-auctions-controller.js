@@ -23,7 +23,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 	 * @param sessionContext {de.sb.broker.SessionContext} a session context
 	 */
 	de.sb.broker.OpenAuctionsController = function (sessionContext) {
-		SUPER.call(this, 2, sessionContext);
+		SUPER.call(this, 1, sessionContext);
 	}
 	de.sb.broker.OpenAuctionsController.prototype = Object.create(SUPER.prototype);
 	de.sb.broker.OpenAuctionsController.prototype.constructor = de.sb.broker.OpenAuctionsController;
