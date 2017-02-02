@@ -183,3 +183,9 @@ this.de.sb.broker = this.de.sb.broker || {};
 		return person.name.given + " " + person.name.family + " (" + person.contact.email + ")";
 	}
 } ());
+
+	/**
+	 * Drag and drop
+	 */
+	 function dragAndDrop() {
+	 }

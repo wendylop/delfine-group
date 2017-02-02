@@ -34,6 +34,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 		document.querySelector("main").appendChild(sectionElement);
 
 		this.displayUser();
+		this.displayAvatar();
 	}
 
 
@@ -54,7 +55,61 @@ this.de.sb.broker = this.de.sb.broker || {};
 		activeElements[8].value = user.contact.email;
 		activeElements[9].value = user.contact.phone;
 	}
+	
+	/**
+	 *
+	 */
+	de.sb.broker.PreferencesController.prototype.displayAvatar = function () {
+		var userID = this.sessionContext.user.identity;
+		var avatar = document.querySelector("#avatar-img");
+		var dropzone = document.querySelector("#avatar-drop");
+		
+		//avatar.src = "/services/people/" + userID + "/avatar?time=" + new Date().getTime();
+		
+		console.log("define dropzone");
+		
+		dropzone.addEventListener(
+		    'dragover',
+		    function handleDragOver(evt) {
+		      evt.stopPropagation()
+		      evt.preventDefault()
+		      evt.dataTransfer.dropEffect = 'copy'
+		    },
+		    false
+		  );
+		
+		
+		dropzone.addEventListener('drop', ondrop);
+	}
+	
+	function ondrop(event) {
+	    console.log("did ondrop");
+		event.preventDefault();
 
+		
+		//uploadAvatar(e.dataTransfer.files[0]);
+
+    // Get data linked to event format « text »
+    var _data = event.dataTransfer.getData('text/plain');
+    console.log("getting data"+ String(_data));
+    var element = document.getElementById(_data);
+    console.log(element);
+    
+    // Append drag source element to event's target element
+    event.target.appendChild(element);
+    
+    // Change CSS styles and displayed text
+    element.style.cssText = 'border: 1px solid black;display: block; color: red';
+    element.innerHTML = "I'm in the Drop Zone!";
+	}
+	
+	function uploadAvatar(file) {
+		console.log("uploadAvatar");
+		de.sb.util.AJAX.invoke("/services/people/"+this.sessionContext.user.identity+"/avatar", "PUT", {}, file, this.sessionContext, function (request) {
+			self.displayStatus(request.status, request.statusText);
+			displayAvatar();
+		});
+	}
 
 	/**
 	 * Persists the session user.
