@@ -1,6 +1,8 @@
 package de.sb.broker.rest;
 
 import java.lang.annotation.Annotation;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -45,6 +47,10 @@ import de.sb.broker.model.Person.Group;
 
 @Path("/people")
 public class PersonService {
+	private static final Object hash = null;
+	private Person requester;
+
+
 	/*
 	 * GET /people: Returns the people matching the given criteria, with null or
 	 * missing parameters identifying omitted criteria.
@@ -315,6 +321,8 @@ public class PersonService {
 		EntityManager em = LifeCycleProvider.brokerManager();
 
 		Person person = em.find(Person.class, id);
+		
+		
 		Document document = person.getAvatar();
 
 
@@ -347,12 +355,49 @@ public class PersonService {
 	@Path("{identity}/avatar")
 	@Consumes(MediaType.WILDCARD)
 	public void setAvatar(@HeaderParam("Authorization") final String authentication,
-			@PathParam("identity") final long id, byte[] content, @QueryParam("Content-type") String contentType ) {
+			@PathParam("identity") final long id, byte[] content, @QueryParam("Content-type") String contentType, String AVATAR_QUERY ) throws NoSuchAlgorithmException
+			{
 		LifeCycleProvider.authenticate(authentication);
 
 		EntityManager em = LifeCycleProvider.brokerManager();
+		
+		byte [] contethash = MessageDigest.getInstance("SHA-256").digest(content);
 
 		Person person = em.find(Person.class, id);
+		
+		if (person == null) throw new NotFoundException();
+		
+		if (!requester.equals(person) && requester.getGroup() != Person.Group.ADMIN){
+			throw new ClientErrorException(Status.FORBIDDEN);
+			
+		}
+		
+		Document avatar;
+		
+		try{
+			TypedQuery<Long> query = em.createQuery(AVATAR_QUERY, Long.class)
+					.setParameter("contenthash", hash);
+			
+			Long documentIdentity =query.getSingleResult();
+			avatar = em.find(Document.class, documentIdentity);
+			
+			try{
+				avatar.setType(contentType);
+				em.getTransaction().commit();
+			}finally{
+				if(em.getTransaction().isActive()){
+					em.getTransaction().rollback();
+				}
+				em.getTransaction().begin();
+			}
+			
+		}catch (Exception noDocumet){
+			avatar=new Document(content);
+		}
+		
+		
+		
+		
 		
 		
 		/*TODO
