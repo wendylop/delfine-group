@@ -41,20 +41,17 @@ this.de.sb.broker = this.de.sb.broker || {};
 		//sectionElement = document.querySelector("#open-auctions-template").content.cloneNode(true).firstElementChild;
 		//document.querySelector("main").appendChild(sectionElement);
 
+		//registrierung event send button
+		
 		var indebtedSemaphore = new de.sb.util.Semaphore(1 - 2);
 		var statusAccumulator = new de.sb.util.StatusAccumulator();
 		var self = this;
 
-		/*var resource = "/services/people/" + this.sessionContext.user.identity + "/auctions?seller=true&open=true";
-		de.sb.util.AJAX.invoke(resource, "GET", {"Accept": "application/json"}, null, this.sessionContext, function (request) {
-			if (request.status === 200) {
-				var auctions = JSON.parse(request.responseText);
-				self.displaySellerAuctions(auctions);
-			}
-			statusAccumulator.offer(request.status, request.statusText);
-			indebtedSemaphore.release();
-		});*/
-
+		//offene auctionen, eigene gebote
+		//GET services/auctions?closed=false
+		//GET services/people/id/bids?closed=false
+		//gebote in map ablegen, value gebot und key auktionsreferenz von gebot, abgebildet nach gebot
+		
 		var resource = "/services/people/" + this.sessionContext.user.identity + "/auctions?seller=false&open=true";
 		de.sb.util.AJAX.invoke(resource, "GET", {"Accept": "application/json"}, null, this.sessionContext, function (request) {
 			if (request.status === 200) {
@@ -68,6 +65,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 		indebtedSemaphore.acquire(function () {
 			self.displayStatus(statusAccumulator.status, statusAccumulator.statusText);
 		});
+		//
 	}
 
 
@@ -89,19 +87,14 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var rowElement = rowTemplate.cloneNode(true);
 			tableBodyElement.appendChild(rowElement);
 
-			//var maxBid = selectBidByMaximumPrice(auction.bids);
 			var activeElements = rowElement.querySelectorAll("output");
-			//if (maxBid) {
-			//	activeElements[0].value = maxBid.bidder.alias;
-			//	activeElements[0].title = createDisplayTitle(maxBid.bidder);
-			//}
+
 			activeElements[1].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
 			activeElements[2].value = new Date(auction.closureTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
 			activeElements[3].title = auction.description;
 			activeElements[3].value = auction.title;
 			activeElements[4].value = auction.unitCount;
 			activeElements[5].value = (auction.askingPrice * 0.01).toFixed(2);
-			//if (maxBid) activeElements[6].value = (maxBid.price * 0.01).toFixed(2);
 		});
 	}*/
 
@@ -124,10 +117,10 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var rowElement = rowTemplate.cloneNode(true);
 			tableBodyElement.appendChild(rowElement);
 
-			//var maxBid = selectBidByMaximumPrice(auction.bids);
 			var userBid = selectBidByBidder(auction.bids, self.sessionContext.user.identity);
 			var activeElements = rowElement.querySelectorAll("output");
-			activeElements[0].value = auction.seller.alias;
+			activeElements[0].innerHTML = "<img class=\" " + auction.seller.alias + "\" style=\"min-height: 10px; min-width: 10px\">";
+			//auction.seller.alias;
 			activeElements[0].title = createDisplayTitle(auction.seller);
 			//activeElements[1].value = maxBid.bidder.alias;
 			//activeElements[1].title = createDisplayTitle(maxBid.bidder);
@@ -137,8 +130,13 @@ this.de.sb.broker = this.de.sb.broker || {};
 			activeElements[3].title = auction.description;
 			activeElements[4].value = auction.unitCount;
 			activeElements[5].value = (auction.askingPrice * 0.01).toFixed(2);
-			//activeElements[7].value = (userBid.price * 0.01).toFixed(2);
-			//activeElements[8].value = (maxBid.price * 0.01).toFixed(2);
+			
+
+
+			//settings for avatar thumbnail
+			var userID = auction.seller.identity;
+			var avatar = document.querySelector("."+auction.seller.alias);		
+			avatar.src = "/services/people/" + userID + "/avatar";
 		});
 	}
 

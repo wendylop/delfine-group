@@ -93,7 +93,7 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var maxBid = selectBidByMaximumPrice(auction.bids);
 			var activeElements = rowElement.querySelectorAll("output");
 			if (maxBid) {
-				activeElements[0].value = maxBid.bidder.alias;
+				activeElements[0].innerHTML = "<img class=\" " + maxBid.bidder.alias + "\" style=\"min-height: 10px; min-width: 10px\">";
 				activeElements[0].title = createDisplayTitle(maxBid.bidder);
 			}
 			activeElements[1].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
@@ -103,6 +103,11 @@ this.de.sb.broker = this.de.sb.broker || {};
 			activeElements[4].value = auction.unitCount;
 			activeElements[5].value = (auction.askingPrice * 0.01).toFixed(2);
 			if (maxBid) activeElements[6].value = (maxBid.price * 0.01).toFixed(2);
+			
+			//settings for avatar thumbnail
+			var userID = maxBid.bidder.identity;
+			var avatar = document.querySelector("."+maxBid.bidder.alias);		
+			avatar.src = "/services/people/" + userID + "/avatar";
 		});
 	}
 
@@ -128,9 +133,11 @@ this.de.sb.broker = this.de.sb.broker || {};
 			var maxBid = selectBidByMaximumPrice(auction.bids);
 			var userBid = selectBidByBidder(auction.bids, self.sessionContext.user.identity);
 			var activeElements = rowElement.querySelectorAll("output");
-			activeElements[0].value = auction.seller.alias;
+			activeElements[0].innerHTML = "<img class=\" " + auction.seller.alias + " \" style=\"min-height: 10px; min-width: 10px\">";
+			//auction.seller.alias;
 			activeElements[0].title = createDisplayTitle(auction.seller);
-			activeElements[1].value = maxBid.bidder.alias;
+			activeElements[1].innerHTML = "<img class=\" " + maxBid.bidder.alias + " \" style=\"min-height: 10px; min-width: 10px\">";
+			maxBid.bidder.alias;
 			activeElements[1].title = createDisplayTitle(maxBid.bidder);
 			activeElements[2].value = new Date(auction.creationTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
 			activeElements[3].value = new Date(auction.closureTimestamp).toLocaleString(TIMESTAMP_OPTIONS);
@@ -140,6 +147,16 @@ this.de.sb.broker = this.de.sb.broker || {};
 			activeElements[6].value = (auction.askingPrice * 0.01).toFixed(2);
 			activeElements[7].value = (userBid.price * 0.01).toFixed(2);
 			activeElements[8].value = (maxBid.price * 0.01).toFixed(2);
+			
+			
+			//settings for avatar thumbnail
+			var userID1 = auction.seller.identity;
+			var userID2 = maxBid.bidder.identity;
+			var avatar1 = document.querySelector("."+auction.seller.alias);	
+			var avatar2 = document.querySelector("."+maxBid.bidder.alias);	
+			avatar1.src = "/services/people/" + userID1 + "/avatar";
+			avatar2.src = "/services/people/" + userID2 + "/avatar";
+			
 		});
 	}
 

@@ -64,7 +64,8 @@ this.de.sb.broker = this.de.sb.broker || {};
 		var avatar = document.querySelector("#avatar-img");
 		var dropzone = document.querySelector("#avatar-drop");
 		
-		//avatar.src = "/services/people/" + userID + "/avatar?time=" + new Date().getTime();
+		avatar.src = "/services/people/" + userID + "/avatar?time=" + new Date().getTime();
+		//avatar.innerHTML = "hallo test";
 		
 		console.log("define dropzone");
 		
@@ -90,17 +91,20 @@ this.de.sb.broker = this.de.sb.broker || {};
 		//uploadAvatar(e.dataTransfer.files[0]);
 
     // Get data linked to event format « text »
-    var _data = event.dataTransfer.getData('text/plain');
+    var _data = event.dataTransfer.files[0];
     console.log("getting data"+ String(_data));
-    var element = document.getElementById(_data);
-    console.log(element);
+    
+    var element = document.getElementById("avatar-img");
+    //console.log(element);
+    
+    //URL.createObjectURL() für dropfile
     
     // Append drag source element to event's target element
     event.target.appendChild(element);
     
     // Change CSS styles and displayed text
     element.style.cssText = 'border: 1px solid black;display: block; color: red';
-    element.innerHTML = "I'm in the Drop Zone!";
+    element.innerHTML = element.innerHTML + "I'm in the Drop Zone!";
 	}
 	
 	function uploadAvatar(file) {
